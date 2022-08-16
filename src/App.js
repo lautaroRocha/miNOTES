@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header.jsx'
 import NewNote from './components/NewNote.jsx'
 import NotesGrid from './components/NotesGrid.jsx'
+import Note from './components/Note.jsx'
+
 import {useEffect, useState} from 'react'
 
 
@@ -24,8 +26,9 @@ function App() {
     <Header />
   <div className="container">
    <Routes>
-      <Route exact path="/" element={<NotesGrid notes={notes}/>} />
-     <Route path="/new" element={<NewNote notes={notes} />}/>
+    <Route exact path="/" element={<NotesGrid notes={notes}/>} />
+    <Route path="/new" element={<NewNote notes={notes} />}/>
+    <Route path="/notes" element={<Note notes={notes}/>}/>
    </Routes>
   </div>
   </BrowserRouter>
