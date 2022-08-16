@@ -2,7 +2,7 @@
 
 
 .new-note{
-    background-color: grey;
+    background-color: #455a64;
     width: 90%;
     height: 90%;
     max-height: 80vh;
@@ -54,3 +54,4 @@
 .cancel, .add:hover{
     cursor: pointer;
 }
+

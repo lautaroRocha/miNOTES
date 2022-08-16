@@ -7,18 +7,23 @@ function NewNote(props){
     const cancel = () =>{
         navigate('/', {replace:true})
     }
-
     const add = () =>{
         let notes = props.notes;
         let title = document.querySelector('.new-note-title').value;
         let body = document.querySelector('.new-note-body').value;
+        let col = document.querySelector('#colorPicker').value
         let note = {
-            title, body
+            title, body, col
         };
         notes.push(note)
         localStorage.setItem('notes', JSON.stringify(notes));
+        navigate('/', {replace:true})
     }
-    
+    function colourCard(e){
+        let card = document.querySelector(".new-note")
+        card.style.backgroundColor = e.target.value;
+    }
+
     return(
     <>
         <div className="new-note">
@@ -30,7 +35,7 @@ function NewNote(props){
             <button className="cancel" onClick={cancel}>
             🗑️
             </button>
-            
+            <input type="color" id="colorPicker" onChange={colourCard}/>
             <button className="add" onClick={add}>
             ✔️
             </button>

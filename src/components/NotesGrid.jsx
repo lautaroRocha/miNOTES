@@ -7,9 +7,9 @@ function NotesGrid(props) {
         <div className="notes-grid">
             {props.notes.map((note, idx) =>{
                 return(
-                    <div className="note" key={idx}>
+                    <div className="note" key={idx} style={{backgroundColor:`${note.col}`}}>
                         <span>{note.title}</span>
-                        <p>{note.body}</p>
+                        <p>{note.body.substring(0,150)+"..."}</p>
                     </div>
                 )
             })}
