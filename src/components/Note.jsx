@@ -1,10 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useState, useEffect } from "react";
 import '../styles/new_note.css'
 
 function Note(props){
     const navigate = useNavigate();
+
+    const [savedNotes, setSavedNotes] = useState(props.notes);
+
+    useEffect(() => {
+        let savedArr = props.notes;
+        setSavedNotes(savedArr);
+    }, [savedNotes])
 
     let params = new URLSearchParams(document.location.search)
     let title = params.get('title')
@@ -35,9 +42,12 @@ function Note(props){
         let editedNote = {
             title, body,col
         };
+        if(!title || !body){
+            navigate('/', {replace:true})
+        }else{
         notesArray.splice(noteIdx, 1, editedNote);
         localStorage.setItem('notes', JSON.stringify(notesArray));
-        navigate('/', {replace:true})
+        navigate('/', {replace:true})}
     }
     const dispose = () => {
         notesArray.splice(noteIdx, 1);
