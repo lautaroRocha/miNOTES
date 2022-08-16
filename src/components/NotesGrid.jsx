@@ -1,23 +1,27 @@
 import React from "react";
-import {Link} from 'react-router-dom'
+import MinNote from "./MinNote";
+import { useState, useEffect } from "react";
 import '../styles/notes_grid.css'
 
 function NotesGrid(props) {
 
-    return(  
-        <div className="notes-grid">
-            {props.notes.map((note, idx) =>{
-                return(
-                    <Link to={`/notes?title=${note.title}`} style={{textDecoration: "none"}} key={idx}>
-                    <div className="note"  style={{backgroundColor:`${note.col}`}}>
-                        <span>{note.title}</span>
-                        <p>{note.body.substring(0,150)+"..."}</p>
-                    </div>
-                    </Link>
-                )
-            })}
-        </div>
-        )
+    const [savedNotes, setSavedNotes] = useState(props.notes);
+
+    useEffect(() => {
+        let savedArr = props.notes;
+        setSavedNotes([...savedArr]);
+    }, [savedNotes])
+
+        return(  
+            <div className="notes-grid">
+                {savedNotes.map((note, idx) =>{
+                    return(
+                        <MinNote note={note} key={idx} notes={props.notes}/>
+                    )
+                })}
+            </div>
+            )
     }
+  
 
 export default NotesGrid;

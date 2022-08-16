@@ -19,6 +19,22 @@
     padding: 10px;
     color: white;
 }
+
+.note-actions{
+    display:flex;
+    height: 1rem;
+    gap: 1rem;
+}
+.note-actions button {
+    background-color: transparent;
+    border: none;
+    fill: white;
+}
+.note-actions button:hover{
+    cursor: pointer;
+    filter: drop-shadow(-1px 1px 1px white);
+}
+
 .note:hover{
     cursor: pointer;
     transform: translate(-5px, -5px);
