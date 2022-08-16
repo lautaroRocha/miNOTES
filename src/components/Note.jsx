@@ -1,9 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import '../styles/new_note.css'
 
 function Note(props){
+    const navigate = useNavigate();
+
     let params = new URLSearchParams(document.location.search)
     let title = params.get('title')
+
     let note = props.notes.find(note => note.title === title)
     let notesArray = props.notes;
     let noteIdx = props.notes.indexOf(note);
@@ -32,6 +37,12 @@ function Note(props){
         };
         notesArray.splice(noteIdx, 1, editedNote);
         localStorage.setItem('notes', JSON.stringify(notesArray));
+        navigate('/', {replace:true})
+    }
+    const dispose = () => {
+        notesArray.splice(noteIdx, 1);
+        localStorage.setItem('notes', JSON.stringify(notesArray));
+        navigate('/', {replace:true})
     }
     return(
         <>
@@ -43,7 +54,7 @@ function Note(props){
             {note.body}
            </p>
            <div className="new-note-btns">
-            <button className="cancel">
+            <button className="cancel" onClick={dispose}>
             🗑️
             </button>
             <button className="cancel" onClick={edit}>
