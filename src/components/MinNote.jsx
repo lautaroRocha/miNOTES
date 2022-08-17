@@ -9,13 +9,14 @@ function MinNote(props){
     let notesArray = props.notes;
     let noteIdx = props.notes.indexOf(props.note);
 
- 
-
     const dispose = (e) => {
         e.preventDefault();
         notesArray.splice(noteIdx, 1);
         localStorage.setItem('notes', JSON.stringify(notesArray));
+        let setErasedNotes = props.set;
+        setErasedNotes(true)
     }
+
     return(
         <Link  to={`/notes?title=${props.note.title}`} style={{textDecoration: "none"}} >
                     <div className="note"  style={{backgroundColor:`${props.note.col}`}}>

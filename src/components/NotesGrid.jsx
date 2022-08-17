@@ -6,17 +6,18 @@ import '../styles/notes_grid.css'
 function NotesGrid(props) {
 
     const [savedNotes, setSavedNotes] = useState(props.notes);
+    const [erasedNote, setErasedNote] = useState(false);
 
     useEffect(() => {
         let savedArr = props.notes;
         setSavedNotes([...savedArr]);
-    }, [savedNotes])
+    }, [erasedNote, props.notes])
 
         return(  
             <div className="notes-grid">
                 {savedNotes.map((note, idx) =>{
                     return(
-                        <MinNote note={note} key={idx} notes={props.notes}/>
+                        <MinNote note={note} key={idx} notes={props.notes} set={setErasedNote}/>
                     )
                 })}
             </div>
