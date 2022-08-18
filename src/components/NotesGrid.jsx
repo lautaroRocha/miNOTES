@@ -14,10 +14,11 @@ function NotesGrid(props) {
     }, [erasedNote, props.notes])
 
         return(  
+            
             <div className="notes-grid">
                 {savedNotes.map((note, idx) =>{
                     return(
-                        <MinNote note={note} key={idx} notes={props.notes} set={setErasedNote}/>
+                        <MinNote note={note} key={idx} notes={props.notes} set={setErasedNote} addOrRemoveFav={props.addOrRemoveFav}/>
                     )
                 })}
             </div>
