@@ -1,3 +1,4 @@
+import { render } from "@testing-library/react";
 import React from "react"
 import { Link } from "react-router-dom"
 import '../styles/notes_grid.css'
@@ -15,7 +16,6 @@ function MinNote(props){
         setErasedNotes(true)
     }
     let current = window.location.pathname;
-
     return(
         <Link  to={`/notes?title=${props.note.title}&&from=${current}`} style={{textDecoration: "none"}} >
                     <div className="note"  style={{backgroundColor:`${props.note.col}`}}>

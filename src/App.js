@@ -10,6 +10,7 @@ import {useEffect, useState} from 'react'
 
 function App() {
   const [notes, setNotes] = useState([]);
+  
   useEffect(() => {
       const notesInLocal = localStorage.getItem('notes');
       if(notesInLocal !==null){
