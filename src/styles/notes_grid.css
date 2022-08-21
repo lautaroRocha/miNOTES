@@ -29,9 +29,14 @@ section{
     display: flex;
     height: 1rem;
     gap: 1rem;
-    opacity: 0;
+    transition: opacity .5s;
+    opacity: 0.35;
     width: 100%;
 }
+.note::before:hover{
+    opacity:1;
+}
+
 .note-actions:hover{
     opacity:1;
 }
