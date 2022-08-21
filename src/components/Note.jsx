@@ -39,10 +39,6 @@ function Note(props){
         noteIdx = props.favs.indexOf(note);
     }  
     
-
-
-    console.log(origin)
-
     const edit = () =>{
         const titleToEdit = document.querySelector('.new-note-title')
         const editableTitle = document.createElement("textarea");
@@ -51,6 +47,7 @@ function Note(props){
 
         const bodyToEdit = document.querySelector('.new-note-body')
         const editableBody = document.createElement("textarea");
+        editableBody.setAttribute('form', "usrform")
         editableBody.className = "new-note-body"
         editableBody.textContent= note.body;
 
@@ -65,7 +62,9 @@ function Note(props){
             title, body,col
         };
         if(!title || !body){
-            navigate('/', {replace:true})
+            origin !== '/fav' && navigate('/', {replace:true});
+            origin === '/fav' && navigate('/fav', {replace:true})
+
         }else{
         notesArray.splice(noteIdx, 1, editedNote);
         localStorage.setItem('notes', JSON.stringify(notesArray));
@@ -81,12 +80,10 @@ function Note(props){
             <>
       
              <div  className="new-note" style={{backgroundColor:`${note.col}`}}  > 
-               <p  className="new-note-title">
-                {note.title}
-               </p>
-               <p  className="new-note-body">
-                {note.body}
-               </p>
+               <textarea disabled value={note.title} className="new-note-title">
+               </textarea>
+               <textarea disabled value={note.body} form="usrform" className="new-note-body">
+               </textarea>
                <div className="new-note-btns">
                {origin !== "/fav" &&
                 <button className="cancel" onClick={dispose}>

@@ -26,9 +26,14 @@ section{
 }
 
 .note-actions{
-    display:flex;
+    display: flex;
     height: 1rem;
     gap: 1rem;
+    opacity: 0;
+    width: 100%;
+}
+.note-actions:hover{
+    opacity:1;
 }
 .note-actions button {
     background-color: transparent;
@@ -49,7 +54,14 @@ section{
     font-weight: bolder;
     margin: 10px;
 }
-.note p{
-   margin: 0 10px;
-   overflow-wrap: break-word;
+.note textarea{
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    margin: 0 10px;
+    overflow-wrap: break-word;
+    height: 100%;
+    resize: none;
+    text-align: center;
 }

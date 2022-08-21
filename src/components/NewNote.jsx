@@ -30,9 +30,9 @@ function NewNote(props){
     return(
     <>
         <div className="new-note">
-           <textarea className="new-note-title">
+           <textarea form="usrform" className="new-note-title">
            </textarea>
-           <textarea className="new-note-body">
+           <textarea  form="usrform" className="new-note-body">
            </textarea>
            <div className="new-note-btns">
             <button className="cancel" onClick={cancel}>

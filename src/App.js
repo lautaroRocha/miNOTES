@@ -10,7 +10,7 @@ import {useEffect, useState} from 'react'
 
 function App() {
   const [notes, setNotes] = useState([]);
-  
+
   useEffect(() => {
       const notesInLocal = localStorage.getItem('notes');
       if(notesInLocal !==null){
@@ -35,22 +35,20 @@ function App() {
     e.preventDefault();
     let savedFavs = localStorage.getItem('favs');
     let tempFavs;
-    
     if(savedFavs == null){
       tempFavs = [];
     }else{
       tempFavs = JSON.parse(savedFavs)
     }
-
-    let targetNote = e.target.parentElement.parentElement.parentElement;
+    let parent = e.target.parentElement
+    let targetZone = parent.parentElement;
+    let targetNote = targetZone.parentElement;
     let title = targetNote.querySelector('.new-note-title').textContent;
-    let body = targetNote.querySelector('.new-note-body').innerText;
+    let body = targetNote.querySelector('.new-note-body').textContent;
     let col = targetNote.style.backgroundColor;
-
     let favNote = {
       title, body, col
     }
-
     let noteIsFav = tempFavs.find( oneNote =>{
       return oneNote.title === favNote.title})
 
