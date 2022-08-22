@@ -40,29 +40,31 @@ function App() {
     }else{
       tempFavs = JSON.parse(savedFavs)
     }
+    
     let parent = e.target.parentElement
     let targetZone = parent.parentElement;
     let targetNote = targetZone.parentElement;
-    let title = targetNote.querySelector('.new-note-title').textContent;
-    let body = targetNote.querySelector('.new-note-body').textContent;
+    let targetNoteNote = targetNote.parentElement;
+    let title = targetNoteNote.querySelector('.new-note-title').textContent;
+    let body = targetNoteNote.querySelector('.new-note-body').textContent;
     let col = targetNote.style.backgroundColor;
     let favNote = {
       title, body, col
     }
-    let noteIsFav = tempFavs.find( oneNote =>{
-      return oneNote.title === favNote.title})
 
-      if(!noteIsFav){
+    let noteIsFav = tempFavs.find( oneNote =>{return oneNote.title === favNote.title})
+
+    if(!noteIsFav){
         tempFavs.push(favNote)
         localStorage.setItem('favs', JSON.stringify(tempFavs));
         setFavs(tempFavs)
-      }else{
-        let notesLeft = tempFavs.filter(note => {
-          return note.title !== favNote.title;})
+    }else{
+      let notesLeft = tempFavs.filter(note => {
+      return note.title !== favNote.title;})
       localStorage.setItem('favs', JSON.stringify(notesLeft))
       setFavs(notesLeft)
-      }
-    
+    }
+  
     }
 
   return (
@@ -71,7 +73,7 @@ function App() {
   <div className="container">
    <Routes>
     <Route path="/new" element={<NewNote notes={notes} favs={favs}/>}/>
-    <Route exact path="/" element={<NotesGrid notes={notes} addOrRemoveFav={addOrRemoveFav}/>} />
+    <Route exact path="/" element={<NotesGrid notes={notes}  favs={favs} addOrRemoveFav={addOrRemoveFav}/>} />
     <Route path="/notes" element={<Note notes={notes} favs={favs}/>}/>
     <Route path="/fav" element={<Favs notes={notes} favs={favs} addOrRemoveFav={addOrRemoveFav}/>}/>
    </Routes>
