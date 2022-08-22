@@ -39,7 +39,7 @@ function MinNote(props){
                         <textarea value={
                         props.note.body.length < 100 ? 
                         props.note.body:
-                        props.note.body.substring(0, 101)+"..."} disabled form="usrform"  className="new-note-body" ></textarea>
+                        props.note.body.substring(0, 100)+"... "} disabled form="usrform"  className="new-note-body" ></textarea>
                     </div>
                     </Link>
     )

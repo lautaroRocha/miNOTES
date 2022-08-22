@@ -8,7 +8,10 @@ function Header() {
         navegar('/new', {replace: true})
     }
     const goToFavs = () =>{
-        navegar('/fav', {replace: true})
+        let current = window.location.pathname;        
+        current !== '/fav' ?
+        navegar('/fav', {replace: true}):
+        navegar('/', {replace: true})
     }
     return(
         <div className="head">

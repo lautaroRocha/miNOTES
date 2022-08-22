@@ -38,8 +38,10 @@ function NewNote(props){
             <button className="cancel" onClick={cancel}>
             🗑️
             </button>
-            <input type="color" id="colorPicker" onChange={colourCard} list="presetColors" />
+            <input type="color" id="colorPicker" onChange={colourCard} list="presetColors" defaultValue='#455a64'/>
+           
                 <datalist id="presetColors">
+                    <option>#455a64</option>
                     <option>#C8566B</option>
                     <option>#E78963</option>
                     <option>#F2D48F</option>
