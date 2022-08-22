@@ -51,7 +51,6 @@ function App() {
     }
     let noteIsFav = tempFavs.find( oneNote =>{
       return oneNote.title === favNote.title})
-
       if(!noteIsFav){
         tempFavs.push(favNote)
         localStorage.setItem('favs', JSON.stringify(tempFavs));
@@ -71,7 +70,7 @@ function App() {
   <div className="container">
    <Routes>
     <Route path="/new" element={<NewNote notes={notes} favs={favs}/>}/>
-    <Route exact path="/" element={<NotesGrid notes={notes} addOrRemoveFav={addOrRemoveFav}/>} />
+    <Route exact path="/" element={<NotesGrid notes={notes}  favs={favs} addOrRemoveFav={addOrRemoveFav}/>} />
     <Route path="/notes" element={<Note notes={notes} favs={favs}/>}/>
     <Route path="/fav" element={<Favs notes={notes} favs={favs} addOrRemoveFav={addOrRemoveFav}/>}/>
    </Routes>

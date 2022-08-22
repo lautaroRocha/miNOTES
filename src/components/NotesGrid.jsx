@@ -25,12 +25,15 @@ function NotesGrid(props) {
     }
     , [setFavs])
 
+
+  
+
         return(  
             <div className="notes-grid">
                 {savedNotes.map((note, idx) =>{
-                    let isFav = favs.find(ele => ele.title === note.title);
+                      let noteIsFav = props.favs.some( oneNote =>oneNote.title === note.title)
                     return(
-                        <MinNote note={note} key={idx} notes={props.notes} set={setErasedNote} addOrRemoveFav={props.addOrRemoveFav} isFav={isFav}/>
+                        <MinNote note={note} key={idx} notes={props.notes} set={setErasedNote} addOrRemoveFav={props.addOrRemoveFav} isFav={noteIsFav}/>
                         )
                 })}
             </div>
