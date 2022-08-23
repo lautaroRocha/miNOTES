@@ -12,6 +12,8 @@ section{
     grid-auto-rows: 220px;
     gap: 10px;
     justify-items: center;
+    align-items: center;
+    justify-content: center;
 }
 .notes-grid a{
     height: 200px;
