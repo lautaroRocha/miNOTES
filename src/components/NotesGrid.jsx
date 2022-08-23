@@ -2,6 +2,8 @@ import React from "react";
 import MinNote from "./MinNote";
 import { useState, useEffect } from "react";
 import '../styles/notes_grid.css'
+import { collection, getFirestore, getDocs } from "firebase/firestore";
+/* eslint-disable no-unused-expressions */
 
 function NotesGrid(props) {
 
@@ -11,9 +13,12 @@ function NotesGrid(props) {
 
     useEffect(() => {
         setErasedNote(false)
-        let savedArr = props.notes;
-        setSavedNotes(savedArr);
-    }, [erasedNote, savedNotes])
+        const db = getFirestore();
+        const notesColl = collection(db, 'notes');
+        getDocs(notesColl).then((item) => {
+            let savedArr  = item.docs.map((note) => note.data())
+            setSavedNotes(savedArr);
+        }), [erasedNote, savedNotes] });
 
 
         return(  

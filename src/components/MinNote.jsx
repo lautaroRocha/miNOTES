@@ -32,9 +32,8 @@ function MinNote(props){
         }
     }
     return(
-      
-        <Link  to={`/notes?title=${props.note.title}&&from=${current}`} style={{textDecoration: "none"}} >
-                    <div className="note"  style={{backgroundColor:`${props.note.col}`}}>
+        <Link  to={`/notes?title=${props.note.title}&&from=${current}`}style={{textDecoration: "none"}} >
+                    <div className="note"  style={{backgroundColor:`${props.note.color}`}}>
                     <div className="note-actions">
                        { window.location.pathname !== '/fav' &&
                        <button onClick={dispose}>

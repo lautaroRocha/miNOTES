@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/new_note.css'
+import { addDoc, collection, getFirestore} from 'firebase/firestore'
+
 
 function NewNote(props){
     const navigate = useNavigate();
@@ -9,17 +11,25 @@ function NewNote(props){
     }
     const add = () =>{
         let notes = props.notes;
+        const db = getFirestore()
+        const notesColl = collection( db, 'notes')
+
         let title = document.querySelector('.new-note-title').value;
         let body = document.querySelector('.new-note-body').value;
         let col = document.querySelector('#colorPicker').value
         let note = {
-            title, body, col
-        };
+            title : title,
+            body : body,
+            color : col
+        }
         if(!title || !body){
             alert('vacío')
         }else{
-        notes.push(note)
-        localStorage.setItem('notes', JSON.stringify(notes));
+        // notes.push(note)
+        // localStorage.setItem('notes', JSON.stringify(notes));
+        addDoc(notesColl, note).then(
+            console.log('saved')
+        )
         navigate('/', {replace:true})
         }
     }
