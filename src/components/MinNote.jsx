@@ -1,9 +1,10 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import '../styles/notes_grid.css'
-import { collection, getFirestore, doc, getDoc, documentId, deleteDoc} from "firebase/firestore";
+import { getFirestore, doc, deleteDoc} from "firebase/firestore";
 
 function MinNote(props){
+    
     let notesArray = props.notes;
     let noteIdx = props.notes.indexOf(props.note);
     let current = window.location.pathname;

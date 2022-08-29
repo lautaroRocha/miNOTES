@@ -15,14 +15,7 @@ function Note(props){
 
     const [favs, setFavs] = useState([]);
 
-    useEffect(() => {
-        const favsInLocal = localStorage.getItem('favs');
-        if(favsInLocal !==null){
-          const favsArray = JSON.parse(favsInLocal)
-          setFavs(favsArray);
-        }
-    }
-    , [setFavs])
+
 
     let params = new URLSearchParams(document.location.search)
     let title = params.get('title')
@@ -63,24 +56,35 @@ function Note(props){
         let editedNote = {
             title, body,col
         };
-        if(!title || !body){
+        if(title === note.title && body === note.body){
             origin !== '/fav' && navigate('/', {replace:true});
             origin === '/fav' && navigate('/fav', {replace:true})
         }else{
-        updateDoc(noteRef, {
-            title : editedNote.title,
-            body : editedNote.body
+            if(origin !== '/fav'){
+                updateDoc(noteRef, {
+                    title : editedNote.title,
+                    body : editedNote.body
+                }
+                ).then(
+                    navigate('/', {replace:true})
+                )
+            }else{
+                navigate('/', {replace:true})
+            }
         }
-        ).then(
-            console.log('ya po')
-        )
-        navigate('/', {replace:true})}
     }
     const dispose = () => {
-        let docRef =  doc(db, 'notes', props.note.title);
-        deleteDoc(docRef);
-        navigate('/', {replace:true})
+        if(origin === "/fav"){
+            let docRef =  doc(db, 'favs', props.note.title);
+            deleteDoc(docRef);
+            navigate('/', {replace:true})
+        }else{
+            let docRef =  doc(db, 'notes', props.note.title);
+            deleteDoc(docRef);
+            navigate('/', {replace:true})
+        }
     }
+
     while(note !== null & note !== undefined){
         return(
             <>

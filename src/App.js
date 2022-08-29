@@ -6,7 +6,7 @@ import NotesGrid from './components/NotesGrid.jsx'
 import Note from './components/Note.jsx'
 import Favs from './components/Favs';
 import {useEffect, useState} from 'react'
-import { collection, getFirestore, getDocs } from "firebase/firestore";
+import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from "firebase/firestore";
 
 
 function App() {
@@ -14,6 +14,8 @@ function App() {
 
   const db = getFirestore();
   const notesColl = collection(db, 'notes');
+
+  const favsColl = collection(db, 'favs');
 
   useEffect(() => {
     getDocs(notesColl)
@@ -23,27 +25,19 @@ function App() {
     })
   })
 
-
   const [favs, setFavs] = useState([]);
 
   useEffect(() => {
-      const favsInLocal = localStorage.getItem('favs');
-      if(favsInLocal !==null){
-        const favsArray = JSON.parse(favsInLocal)
-        setFavs(favsArray);
-      }
-  }
-  , [])
+    getDocs(favsColl)
+    .then((item) => {
+        let favsArr  = item.docs.map((note) => note.data())
+        setFavs(favsArr);
+    })
+  })
 
   const addOrRemoveFav = (e) =>{
     e.preventDefault();
-    let savedFavs = localStorage.getItem('favs');
-    let tempFavs;
-    if(savedFavs == null){
-      tempFavs = [];
-    }else{
-      tempFavs = JSON.parse(savedFavs)
-    }
+    const tempFavs = favs;
     
     let parent = e.target.parentElement
     let targetZone = parent.parentElement;
@@ -51,24 +45,23 @@ function App() {
     let targetNoteNote = targetNote.parentElement;
     let title = targetNoteNote.querySelector('.new-note-title').textContent;
     let body = targetNoteNote.querySelector('.new-note-body').textContent;
-    let col = targetNote.style.backgroundColor;
-    let favNote = {
-      title, body, col
-    }
+    let col = targetNoteNote.style.backgroundColor;
+  
 
-    let noteIsFav = tempFavs.find( oneNote =>{return oneNote.title === favNote.title})
+    let noteIsFav = tempFavs.find( oneNote =>{return oneNote.title === title})
 
     if(!noteIsFav){
-        tempFavs.push(favNote)
-        localStorage.setItem('favs', JSON.stringify(tempFavs));
-        setFavs(tempFavs)
+      setDoc(doc(db, 'favs', title), {
+        title : title,
+        body : body,
+        color : col
+    }).then(
+        console.log('ya po')
+    )
     }else{
-      let notesLeft = tempFavs.filter(note => {
-      return note.title !== favNote.title;})
-      localStorage.setItem('favs', JSON.stringify(notesLeft))
-      setFavs(notesLeft)
+      let docRef =  doc(db, 'favs', title);
+      deleteDoc(docRef) 
     }
-  
     }
 
   return (
