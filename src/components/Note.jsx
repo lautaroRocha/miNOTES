@@ -1,11 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useCallback } from "react";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 function Note(props){
     const navigate = useNavigate();
-
+    const MySwal = withReactContent(Swal)
     const [savedNotes, setSavedNotes] = useState(props.notes);
 
     useEffect(() => {
@@ -24,6 +25,7 @@ function Note(props){
     }
     , [setFavs])
 
+    
     let params = new URLSearchParams(document.location.search)
     let title = params.get('title')
     let origin = params.get('from')
@@ -71,10 +73,43 @@ function Note(props){
         navigate('/', {replace:true})}
     }
     const dispose = () => {
-        notesArray.splice(noteIdx, 1);
-        localStorage.setItem('notes', JSON.stringify(notesArray));
-        navigate('/', {replace:true})
+        MySwal.fire({
+            customClass: {
+                confirmButton: "confirm-btn",
+                popup : "swal-cont"
+            },
+            title : '¿🗑️?',
+            showCancelButton: true })
+            .then( (result) =>{
+                if(result.isConfirmed){
+                    notesArray.splice(noteIdx, 1);
+                    localStorage.setItem('notes', JSON.stringify(notesArray));
+                    navigate('/', {replace:true})
+                } 
+            })
+        
     }
+
+    const handleKeyPress = useCallback((event) => {
+        if (event.shiftKey === true) {
+          event.key === 's' || event.key === 'S' && save();
+          event.key === 'e' || event.key === 'E' && edit();
+          event.key === 'd' || event.key === 'D' && dispose();
+          event.key === 'Backspace' && navigate('/', {replace:true});
+        }
+
+      }, []);
+
+    useEffect(() => {
+        // attach the event listener
+        document.addEventListener('keydown', handleKeyPress);
+    
+        // remove the event listener
+        return () => {
+          document.removeEventListener('keydown', handleKeyPress);
+        };
+      }, [handleKeyPress]);
+
     while(note !== null & note !== undefined){
         return(
             <>

@@ -1,9 +1,13 @@
-import { render } from "@testing-library/react";
 import React from "react"
 import { Link } from "react-router-dom"
 import '../styles/notes_grid.css'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import '../styles/swal.css'
 
 function MinNote(props){
+
+    const MySwal = withReactContent(Swal)
 
     let notesArray = props.notes;
     let noteIdx = props.notes.indexOf(props.note);
@@ -20,17 +24,33 @@ function MinNote(props){
         }
     }
 
+
     const dispose = (e) => {
         if(current !== "/fav"){
         e.preventDefault();
-        notesArray.splice(noteIdx, 1);
-        localStorage.setItem('notes', JSON.stringify(notesArray));
-        let setErasedNotes = props.set;
-        setErasedNotes(true)}
-        else{
+        MySwal.fire({
+            customClass: {
+                confirmButton: "confirm-btn",
+                popup : "swal-cont"
+            },
+            title : '¿🗑️?',
+            showCancelButton: true })
+            .then( (result) =>{
+                if(result.isConfirmed){
+                    notesArray.splice(noteIdx, 1);
+                    localStorage.setItem('notes', JSON.stringify(notesArray));
+                    let setErasedNotes = props.set;
+                    setErasedNotes(true)
+                } 
+            });
+
+               }else{
             props.addOrRemoveFav();
         }
     }
+
+   
+
     return(
       
         <Link  to={`/notes?title=${props.note.title}&&from=${current}`} style={{textDecoration: "none"}} >

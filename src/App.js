@@ -1,5 +1,5 @@
 import './styles/app.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header.jsx'
 import NewNote from './components/NewNote.jsx'
 import NotesGrid from './components/NotesGrid.jsx'
@@ -31,6 +31,7 @@ function App() {
   }
   , [])
 
+
   const addOrRemoveFav = (e) =>{
     e.preventDefault();
     let savedFavs = localStorage.getItem('favs');
@@ -59,6 +60,7 @@ function App() {
         localStorage.setItem('favs', JSON.stringify(tempFavs));
         setFavs(tempFavs)
     }else{
+
       let notesLeft = tempFavs.filter(note => {
       return note.title !== favNote.title;})
       localStorage.setItem('favs', JSON.stringify(notesLeft))
