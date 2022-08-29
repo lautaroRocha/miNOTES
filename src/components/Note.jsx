@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-
+import { updateDoc, getFirestore, doc, getDoc, documentId, deleteDoc, setDoc} from "firebase/firestore";
 
 function Note(props){
     const navigate = useNavigate();
@@ -34,11 +34,12 @@ function Note(props){
     let note = props.notes.find(note => note.title === title);
     let noteIdx = props.notes.indexOf(note);
 
+    const db = getFirestore();
+
     if(origin === "/fav"){
         note = props.favs.find(note => note.title === title)
         noteIdx = props.favs.indexOf(note);
     }  
-    
     const edit = () =>{
         const titleToEdit = document.querySelector('.new-note-title')
         const editableTitle = document.createElement("textarea");
@@ -58,28 +59,32 @@ function Note(props){
         let title = document.querySelector('.new-note-title').value;
         let body = document.querySelector('.new-note-body').value;
         let col = note.col;
+        const noteRef = doc(db, "notes", note.title)
         let editedNote = {
             title, body,col
         };
         if(!title || !body){
             origin !== '/fav' && navigate('/', {replace:true});
             origin === '/fav' && navigate('/fav', {replace:true})
-
         }else{
-        notesArray.splice(noteIdx, 1, editedNote);
-        localStorage.setItem('notes', JSON.stringify(notesArray));
+        updateDoc(noteRef, {
+            title : editedNote.title,
+            body : editedNote.body
+        }
+        ).then(
+            console.log('ya po')
+        )
         navigate('/', {replace:true})}
     }
     const dispose = () => {
-        notesArray.splice(noteIdx, 1);
-        localStorage.setItem('notes', JSON.stringify(notesArray));
+        let docRef =  doc(db, 'notes', props.note.title);
+        deleteDoc(docRef);
         navigate('/', {replace:true})
     }
     while(note !== null & note !== undefined){
         return(
             <>
-      
-             <div  className="new-note" style={{backgroundColor:`${note.col}`}}  > 
+             <div  className="new-note" style={{backgroundColor:`${note.color}`}}  > 
                <textarea disabled value={note.title} className="new-note-title">
                </textarea>
                <textarea disabled value={note.body} form="usrform" className="new-note-body">

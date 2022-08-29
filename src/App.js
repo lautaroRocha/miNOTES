@@ -6,19 +6,23 @@ import NotesGrid from './components/NotesGrid.jsx'
 import Note from './components/Note.jsx'
 import Favs from './components/Favs';
 import {useEffect, useState} from 'react'
+import { collection, getFirestore, getDocs } from "firebase/firestore";
 
 
 function App() {
   const [notes, setNotes] = useState([]);
 
+  const db = getFirestore();
+  const notesColl = collection(db, 'notes');
+
   useEffect(() => {
-      const notesInLocal = localStorage.getItem('notes');
-      if(notesInLocal !==null){
-        const notesArray = JSON.parse(notesInLocal)
-        setNotes(notesArray);
-      }
-  }
-  , [])
+    getDocs(notesColl)
+    .then((item) => {
+        let savedArr  = item.docs.map((note) => note.data())
+        setNotes(savedArr);
+    })
+  })
+
 
   const [favs, setFavs] = useState([]);
 

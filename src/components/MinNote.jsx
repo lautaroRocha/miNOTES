@@ -1,16 +1,15 @@
-import { render } from "@testing-library/react";
 import React from "react"
 import { Link } from "react-router-dom"
 import '../styles/notes_grid.css'
+import { collection, getFirestore, doc, getDoc, documentId, deleteDoc} from "firebase/firestore";
 
 function MinNote(props){
-
     let notesArray = props.notes;
     let noteIdx = props.notes.indexOf(props.note);
-
     let current = window.location.pathname;
     let heart
     let noteIsFav;
+    
     if(window.location.pathname !== '/fav'){
         noteIsFav = props.favs.some( oneNote =>oneNote.title === props.note.title)
         if(noteIsFav){
@@ -20,17 +19,22 @@ function MinNote(props){
         }
     }
 
+    let setErasedNotes = props.set;
+
+    const db = getFirestore();
+
     const dispose = (e) => {
-        if(current !== "/fav"){
         e.preventDefault();
+        if(current !== "/fav"){
+        let docRef =  doc(db, 'notes', props.note.title);
+        deleteDoc(docRef)    
         notesArray.splice(noteIdx, 1);
-        localStorage.setItem('notes', JSON.stringify(notesArray));
-        let setErasedNotes = props.set;
-        setErasedNotes(true)}
-        else{
+        }else{
             props.addOrRemoveFav();
         }
+        setErasedNotes(true)
     }
+
     return(
         <Link  to={`/notes?title=${props.note.title}&&from=${current}`}style={{textDecoration: "none"}} >
                     <div className="note"  style={{backgroundColor:`${props.note.color}`}}>
