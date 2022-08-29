@@ -26,6 +26,8 @@ function MinNote(props){
 
 
     const dispose = (e) => {
+        let setErasedNotes = props.set;
+
         if(current !== "/fav"){
         e.preventDefault();
         MySwal.fire({
@@ -42,7 +44,6 @@ function MinNote(props){
                 if(result.isConfirmed){
                     notesArray.splice(noteIdx, 1);
                     localStorage.setItem('notes', JSON.stringify(notesArray));
-                    let setErasedNotes = props.set;
                     setErasedNotes(true)
                 } 
             });
