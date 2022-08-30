@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { updateDoc, getFirestore, doc, deleteDoc} from "firebase/firestore";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -97,7 +97,24 @@ function Note(props){
                 }
             }
     })}
-            
+
+    const handleKeyPress = useCallback((event) => {
+        if (event.shiftKey === true) {
+          event.key === 's' || event.key === 'S' && save();
+          event.key === 'e' || event.key === 'E' && edit();
+          event.key === 'd' || event.key === 'D' && dispose();
+          event.key === 'Backspace' && navigate('/', {replace:true});
+        }
+
+      }, []);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+          document.removeEventListener('keydown', handleKeyPress);
+        };
+      }, [handleKeyPress]);
+
     while(note !== null & note !== undefined){
         return(
             <>

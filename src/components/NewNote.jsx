@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useCallback } from "react";
 import '../styles/new_note.css'
 import { getFirestore, setDoc, doc} from 'firebase/firestore'
 
@@ -34,6 +35,19 @@ function NewNote(){
         card.style.backgroundColor = e.target.value;
     }
 
+    const handleKeyPress = useCallback((event) => {
+        if (event.shiftKey === true) {
+          event.key === 'Enter' && add();
+          event.key === 'Backspace' && cancel();
+        }
+      }, []);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+          document.removeEventListener('keydown', handleKeyPress);
+        };
+      }, [handleKeyPress]);
     return(
     <>
         <div className="new-note">
