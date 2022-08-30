@@ -7,10 +7,14 @@ import Note from './components/Note.jsx'
 import Favs from './components/Favs';
 import {useEffect, useState} from 'react'
 import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from "firebase/firestore";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 
 function App() {
   const [notes, setNotes] = useState([]);
+
+  const MySwal = withReactContent(Swal)
 
   const db = getFirestore();
   const notesColl = collection(db, 'notes');
@@ -61,7 +65,22 @@ function App() {
     )
     }else{
       let docRef =  doc(db, 'favs', title);
-      deleteDoc(docRef) 
+      MySwal.fire({
+          customClass: {
+              confirmButton: "confirm-btn",
+              popup : "swal-cont"
+          },
+          title : '¿🗑️?',
+          showCancelButton: true,
+          confirmButtonText : <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff" viewBox="0 0 24 24"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg> ,
+          cancelButtonText :<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff"viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg> ,
+          denyButtonText: `Don't save`
+      })
+      .then( (result) => {
+        if(result.isConfirmed){
+          deleteDoc(docRef) 
+        }
+      })
     }
     }
 
