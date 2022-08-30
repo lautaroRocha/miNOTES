@@ -5,11 +5,7 @@ import '../styles/notes_grid.css'
 import MinNote from "./MinNote";
 
 function Favs(props){
-    
-    let params = new URLSearchParams(document.location.search)
-    let title = params.get('path')
-
-        return(  
+    return(  
             <div className="notes-grid">
                 {props.favs.map((note, idx) =>{
                     return(

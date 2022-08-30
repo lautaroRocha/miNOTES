@@ -5,8 +5,6 @@ import { getFirestore, doc, deleteDoc} from "firebase/firestore";
 
 function MinNote(props){
     
-    let notesArray = props.notes;
-    let noteIdx = props.notes.indexOf(props.note);
     let current = window.location.pathname;
     let heart
     let noteIsFav;
@@ -29,7 +27,6 @@ function MinNote(props){
         if(current !== "/fav"){
         let docRef =  doc(db, 'notes', props.note.title);
         deleteDoc(docRef)    
-        notesArray.splice(noteIdx, 1);
         }else{
             props.addOrRemoveFav();
         }

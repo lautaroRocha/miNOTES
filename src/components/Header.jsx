@@ -2,6 +2,7 @@ import React from "react";
 import '../styles/header.css'
 import { useNavigate, Link } from "react-router-dom";
 function Header() {
+    
     const navegar = useNavigate();
 
     const addNote = () =>{

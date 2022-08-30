@@ -37,6 +37,7 @@ function App() {
 
   const addOrRemoveFav = (e) =>{
     e.preventDefault();
+
     const tempFavs = favs;
     
     let parent = e.target.parentElement
@@ -45,7 +46,7 @@ function App() {
     let targetNoteNote = targetNote.parentElement;
     let title = targetNoteNote.querySelector('.new-note-title').textContent;
     let body = targetNoteNote.querySelector('.new-note-body').textContent;
-    let col = targetNoteNote.style.backgroundColor;
+    let col = targetNote.style.backgroundColor;
   
 
     let noteIsFav = tempFavs.find( oneNote =>{return oneNote.title === title})
