@@ -7,8 +7,6 @@ import MinNote from "./MinNote";
 
 function Favs(props){
     const navigate = useNavigate();
-    let params = new URLSearchParams(document.location.search)
-    let title = params.get('path')
 
     const handleKeyPress = useCallback((event) => {
         if (event.shiftKey === true) {
@@ -18,10 +16,7 @@ function Favs(props){
       }, []);
 
     useEffect(() => {
-        // attach the event listener
         document.addEventListener('keydown', handleKeyPress);
-    
-        // remove the event listener
         return () => {
           document.removeEventListener('keydown', handleKeyPress);
         };
