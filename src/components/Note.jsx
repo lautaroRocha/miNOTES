@@ -14,24 +14,12 @@ function Note(props){
         setSavedNotes(savedArr);
     }, [savedNotes])
 
-    const [favs, setFavs] = useState([]);
-
-    useEffect(() => {
-        const favsInLocal = localStorage.getItem('favs');
-        if(favsInLocal !==null){
-          const favsArray = JSON.parse(favsInLocal)
-          setFavs(favsArray);
-        }
-    }
-    , [setFavs])
-
     
     let params = new URLSearchParams(document.location.search)
     let title = params.get('title')
     let origin = params.get('from')
     
     let notesArray = props.notes;
-    let favsArray = props.favs;    
 
     let note = props.notes.find(note => note.title === title);
     let noteIdx = props.notes.indexOf(note);
