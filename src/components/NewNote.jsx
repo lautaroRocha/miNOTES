@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/new_note.css'
+import { useEffect, useCallback } from "react";
 
 function NewNote(props){
     const navigate = useNavigate();
+
     const cancel = () =>{
         navigate('/', {replace:true})
     }
@@ -27,6 +29,23 @@ function NewNote(props){
         let card = document.querySelector(".new-note")
         card.style.backgroundColor = e.target.value;
     }
+
+    const handleKeyPress = useCallback((event) => {
+        if (event.shiftKey === true) {
+          event.key === 's' || event.key === 'S' && add();
+          event.key === 'Backspace' && cancel();
+        }
+      }, []);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+          document.removeEventListener('keydown', handleKeyPress);
+        };
+      }, [handleKeyPress]);
+
+
+
     return(
     <>
         <div className="new-note">

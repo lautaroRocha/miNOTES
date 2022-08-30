@@ -1,9 +1,13 @@
-import { render } from "@testing-library/react";
 import React from "react"
 import { Link } from "react-router-dom"
 import '../styles/notes_grid.css'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import '../styles/swal.css'
 
 function MinNote(props){
+
+    const MySwal = withReactContent(Swal)
 
     let notesArray = props.notes;
     let noteIdx = props.notes.indexOf(props.note);
@@ -20,17 +24,37 @@ function MinNote(props){
         }
     }
 
+
     const dispose = (e) => {
+        let setErasedNotes = props.set;
+
         if(current !== "/fav"){
         e.preventDefault();
-        notesArray.splice(noteIdx, 1);
-        localStorage.setItem('notes', JSON.stringify(notesArray));
-        let setErasedNotes = props.set;
-        setErasedNotes(true)}
-        else{
+        MySwal.fire({
+            customClass: {
+                confirmButton: "confirm-btn",
+                popup : "swal-cont",
+                
+            },
+            confirmButtonText : <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff" viewBox="0 0 24 24"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg> ,
+                cancelButtonText :<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff"viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg> ,
+            title : '¿🗑️?',
+            showCancelButton: true })
+            .then( (result) =>{
+                if(result.isConfirmed){
+                    notesArray.splice(noteIdx, 1);
+                    localStorage.setItem('notes', JSON.stringify(notesArray));
+                    setErasedNotes(true)
+                } 
+            });
+
+               }else{
             props.addOrRemoveFav();
         }
     }
+
+   
+
     return(
       
         <Link  to={`/notes?title=${props.note.title}&&from=${current}`} style={{textDecoration: "none"}} >
