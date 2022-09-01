@@ -7,6 +7,8 @@ import MinNote from "./MinNote";
 
 function Favs(props){
   const navigate = useNavigate();
+  const token = props.token;
+
   const handleKeyPress = useCallback((event) => {
     if (event.shiftKey === true) {
       event.key === 'n' || event.key === 'N' && navigate('/new', {replace:true});
@@ -21,6 +23,11 @@ useEffect(() => {
     };
   }, [handleKeyPress]);
 
+  
+  if(!token){
+    navigate('/login', {replace: true})
+  }
+  else{
     return(  
             <div className="notes-grid">
                 {props.favs.map((note, idx) =>{
@@ -30,6 +37,7 @@ useEffect(() => {
                 })}
             </div>
             )
+    }
 }
 
 export default Favs;

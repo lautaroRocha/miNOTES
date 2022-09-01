@@ -1,18 +1,30 @@
 import React from "react";
 import '../styles/header.css'
 import { useNavigate, Link } from "react-router-dom";
+import { signOut, getAuth } from "firebase/auth";
+
+
 function Header() {
     
-    const navegar = useNavigate();
+    const auth = getAuth();
+    const navigate = useNavigate();
 
     const addNote = () =>{
-        navegar('/new', {replace: true})
+        navigate('/new', {replace: true})
     }
     const goToFavs = () =>{
         let current = window.location.pathname;        
         current !== '/fav' ?
-        navegar('/fav', {replace: true}):
-        navegar('/', {replace: true})
+        navigate('/fav', {replace: true}):
+        navigate('/', {replace: true})
+    }
+    const logOut = () =>{
+        signOut(auth).then(() => {
+            sessionStorage.removeItem('token')
+            navigate('/login', {replace: true})
+        }).catch((error) => {
+            console.log(error)
+          });
     }
     return(
         <div className="head">
@@ -31,6 +43,7 @@ function Header() {
                 <button onClick={addNote} className="new-btn">
                     +
                 </button>
+                <button className="logout" onClick={logOut}> log out</button>
             </div>
         </div>
     )

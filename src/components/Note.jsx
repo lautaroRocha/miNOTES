@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 function Note(props){
-
+    const token = props.token;
     const MySwal = withReactContent(Swal)
     const navigate = useNavigate();
 
@@ -140,7 +140,6 @@ function Note(props){
             </>
         )
     }
-
 }
 
 export default Note;

@@ -8,7 +8,8 @@ import '../styles/notes_grid.css'
 
 function NotesGrid(props) {
     const navigate = useNavigate();
-    
+    const token = props.token;
+
     const [savedNotes, setSavedNotes] = useState([]);
 
     const [erasedNote, setErasedNote] = useState(false);
@@ -32,6 +33,7 @@ function NotesGrid(props) {
         document.removeEventListener('keydown', handleKeyPress);
       };
     }, [handleKeyPress]);
+
         return(  
             <div className="notes-grid">
                 {props.notes.map((note, idx) =>{

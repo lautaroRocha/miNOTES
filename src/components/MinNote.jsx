@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import '../styles/notes_grid.css'
 import { getFirestore, doc, deleteDoc} from "firebase/firestore";
 import Swal from 'sweetalert2'
@@ -8,7 +8,7 @@ import '../styles/swal.css'
 
 
 function MinNote(props){
-    
+    const navigate = useNavigate();
     const MySwal = withReactContent(Swal)
 
     let current = window.location.pathname;
@@ -52,7 +52,7 @@ function MinNote(props){
             props.addOrRemoveFav();
         }
     }
-    return(
+        return(
         <Link  to={`/notes?title=${props.note.title}&&from=${current}`}style={{textDecoration: "none"}} >
                     <div className="note"  style={{backgroundColor:`${props.note.color}`}}>
                     <div className="note-actions">

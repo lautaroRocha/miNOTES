@@ -14,12 +14,12 @@ const firebaseConfig = {
   measurementId: "G-DK9097HGCB"
 };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <App app={app}/>
   </React.StrictMode>
 );
 

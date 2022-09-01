@@ -5,7 +5,8 @@ import '../styles/new_note.css'
 import { getFirestore, setDoc, doc} from 'firebase/firestore'
 
 
-function NewNote(){
+function NewNote(props){
+    const token = props.token;
     const navigate = useNavigate();
     const cancel = () =>{
         navigate('/', {replace:true})
@@ -48,6 +49,10 @@ function NewNote(){
           document.removeEventListener('keydown', handleKeyPress);
         };
       }, [handleKeyPress]);
+
+    if(!token){
+        navigate('/login', {replace:true})
+    }else{
     return(
     <>
         <div className="new-note">
@@ -78,7 +83,7 @@ function NewNote(){
            </div>
         </div>
     </>
-    )
+    )}
 }
 
 

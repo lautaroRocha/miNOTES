@@ -37,3 +37,7 @@
     background-color: #455a64;
     border-radius: 50%;
 }
+
+.head-btns .logout {
+    font-size: 10px;
+}

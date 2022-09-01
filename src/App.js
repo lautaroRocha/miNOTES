@@ -5,13 +5,17 @@ import NewNote from './components/NewNote.jsx'
 import NotesGrid from './components/NotesGrid.jsx'
 import Note from './components/Note.jsx'
 import Favs from './components/Favs';
+import Login from './components/Login';
 import {useEffect, useState} from 'react'
 import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from "firebase/firestore";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 
-function App() {
+function App(props) {
+
+  let token = sessionStorage.getItem('token')
+
   const [notes, setNotes] = useState([]);
 
   const MySwal = withReactContent(Swal)
@@ -89,10 +93,11 @@ function App() {
     <Header />
   <div className="container">
    <Routes>
-    <Route path="/new" element={<NewNote notes={notes} favs={favs}/>}/>
-    <Route exact path="/" element={<NotesGrid notes={notes}  favs={favs} addOrRemoveFav={addOrRemoveFav}/>} />
-    <Route path="/notes" element={<Note notes={notes} favs={favs}/>}/>
-    <Route path="/fav" element={<Favs notes={notes} favs={favs} addOrRemoveFav={addOrRemoveFav}/>}/>
+    <Route path="/login" element={<Login token={token} app={props.app} />} />
+    <Route path="/new" element={<NewNote token={token} notes={notes} favs={favs}/>}/>
+    <Route exact path="/" element={<NotesGrid token={token} notes={notes}  favs={favs} addOrRemoveFav={addOrRemoveFav}/>} />
+    <Route path="/notes" element={<Note token={token} notes={notes} favs={favs}/>}/>
+    <Route path="/fav" element={<Favs token={token} notes={notes} favs={favs} addOrRemoveFav={addOrRemoveFav}/>}/>
    </Routes>
   </div>
   </BrowserRouter>
