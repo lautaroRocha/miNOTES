@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useCallback } from "react";
 import '../styles/new_note.css'
 import { getFirestore, setDoc, doc} from 'firebase/firestore'
-
+import { getAuth } from "firebase/auth";
 
 function NewNote(props){
     const token = props.token;
+    const auth = getAuth();
+    const user = auth.currentUser;
     const navigate = useNavigate();
     const cancel = () =>{
         navigate('/', {replace:true})
@@ -21,7 +23,7 @@ function NewNote(props){
         if(!title || !body){
             alert('vacío')
         }else{
-        setDoc(doc(db, 'notes', title), {
+        setDoc(doc(db, user.uid, title), {
             title : title,
             body : body,
             color : col
@@ -50,9 +52,7 @@ function NewNote(props){
         };
       }, [handleKeyPress]);
 
-    if(!token){
-        navigate('/login', {replace:true})
-    }else{
+
     return(
     <>
         <div className="new-note">
@@ -83,7 +83,7 @@ function NewNote(props){
            </div>
         </div>
     </>
-    )}
+    )
 }
 
 
