@@ -8,8 +8,11 @@ import '../styles/swal.css'
 
 
 function MinNote(props){
-    const navigate = useNavigate();
     const MySwal = withReactContent(Swal)
+
+    const user = localStorage.getItem('user');
+    const currentUser = JSON.parse(user)
+
 
     let current = window.location.pathname;
     let heart
@@ -43,7 +46,7 @@ function MinNote(props){
             showCancelButton: true })
             .then( (result) =>{
                 if(result.isConfirmed){
-                    let docRef =  doc(db, 'notes', props.note.title);
+                    let docRef =  doc(db, 'notes' + currentUser.uid, props.note.title);
                     deleteDoc(docRef)    
                     setErasedNotes(true)
                 } 

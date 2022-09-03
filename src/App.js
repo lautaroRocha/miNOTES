@@ -1,5 +1,5 @@
 import './styles/app.css'
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header.jsx'
 import NewNote from './components/NewNote.jsx'
 import NotesGrid from './components/NotesGrid.jsx'
@@ -8,40 +8,54 @@ import Favs from './components/Favs';
 import Login from './components/Login';
 import {useEffect, useState} from 'react'
 import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from "firebase/firestore";
+import RequireAuth from './components/RequireAuth';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-
 function App(props) {
 
-  let token = sessionStorage.getItem('token')
-
+  const [user, setUser] = useState(null);
   const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState(false)
+  const [erasedNote, setErasedNote] = useState(false);
+
+  const loggedUser = localStorage.getItem('user');
+  const currentUser = JSON.parse(loggedUser)
+
 
   const MySwal = withReactContent(Swal)
 
-  const db = getFirestore();
-  const notesColl = collection(db, 'notes');
 
-  const favsColl = collection(db, 'favs');
+  const db = getFirestore();
 
   useEffect(() => {
+    if(currentUser){
+    let notesColl = collection(db,  'notes' + currentUser.uid);
     getDocs(notesColl)
     .then((item) => {
         let savedArr  = item.docs.map((note) => note.data())
         setNotes(savedArr);
-    })
-  })
+        setNewNote(false)
+    })}else{
+      setNotes([])
+      setNewNote(false)
+    }
+  }, [erasedNote, newNote, user])
 
   const [favs, setFavs] = useState([]);
 
   useEffect(() => {
+    const loggedUser = localStorage.getItem('user');
+    const currentUser = JSON.parse(loggedUser)
+    if(loggedUser){
+    let favsColl = collection(db,  'favs' + currentUser.uid);
     getDocs(favsColl)
     .then((item) => {
         let favsArr  = item.docs.map((note) => note.data())
         setFavs(favsArr);
-    })
+    })}
   })
+
 
   const addOrRemoveFav = (e) =>{
     e.preventDefault();
@@ -60,7 +74,7 @@ function App(props) {
     let noteIsFav = tempFavs.find( oneNote =>{return oneNote.title === title})
 
     if(!noteIsFav){
-      setDoc(doc(db, 'favs', title), {
+      setDoc(doc(db, 'favs' + currentUser.uid, title), {
         title : title,
         body : body,
         color : col
@@ -68,7 +82,7 @@ function App(props) {
         console.log('ya po')
     )
     }else{
-      let docRef =  doc(db, 'favs', title);
+      let docRef =  doc(db,'favs' + currentUser.uid, title);
       MySwal.fire({
           customClass: {
               confirmButton: "confirm-btn",
@@ -88,18 +102,31 @@ function App(props) {
     }
     }
 
+
+
   return (
   <BrowserRouter>
-    <Header />
-  <div className="container">
-   <Routes>
-    <Route path="/login" element={<Login token={token} app={props.app} />} />
-    <Route path="/new" element={<NewNote token={token} notes={notes} favs={favs}/>}/>
-    <Route exact path="/" element={<NotesGrid token={token} notes={notes}  favs={favs} addOrRemoveFav={addOrRemoveFav}/>} />
-    <Route path="/notes" element={<Note token={token} notes={notes} favs={favs}/>}/>
-    <Route path="/fav" element={<Favs token={token} notes={notes} favs={favs} addOrRemoveFav={addOrRemoveFav}/>}/>
-   </Routes>
-  </div>
+      <Header setUser={setUser} user={user} setNotes={setNotes}/>
+    <div className="container">
+    <Routes>
+      <Route path="/login" element={<Login user={user} app={props.app} setUser={setUser} />} />
+      <Route path="/new" element={
+      <NewNote user={user} notes={notes} favs={favs} setNewNote={setNewNote}/>
+      }/>
+      <Route exact path="/" element={
+        <RequireAuth  redirectTo="/login">
+          <NotesGrid user={user} notes={notes} setErasedNote={setErasedNote}  favs={favs} addOrRemoveFav={addOrRemoveFav}/>
+        </RequireAuth>} />
+      <Route path="/notes" element={
+        <RequireAuth  redirectTo="/login">
+          <Note user={user} notes={notes} favs={favs}/>
+          </RequireAuth>}/>
+      <Route path="/fav" element={
+       <RequireAuth  redirectTo="/login">
+        <Favs user={user} notes={notes} favs={favs} addOrRemoveFav={addOrRemoveFav}/>
+        </RequireAuth>}/>
+    </Routes>
+    </div>
   </BrowserRouter>
   );
 }

@@ -6,8 +6,14 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 function Note(props){
-    const token = props.token;
+
+    const user = localStorage.getItem('user');
+    const currentUser = JSON.parse(user);
+    
+    
     const MySwal = withReactContent(Swal)
+
+
     const navigate = useNavigate();
 
     const [savedNotes, setSavedNotes] = useState(props.notes);
@@ -50,7 +56,7 @@ function Note(props){
         let title = document.querySelector('.new-note-title').value;
         let body = document.querySelector('.new-note-body').value;
         let col = note.col;
-        const noteRef = doc(db, "notes", note.title)
+        const noteRef = doc(db, "notes" + currentUser.uid, note.title)
         let editedNote = {
             title, body,col
         };
@@ -91,7 +97,7 @@ function Note(props){
                     deleteDoc(docRef);
                     navigate('/', {replace:true})
                 }else{
-                    let docRef =  doc(db, 'notes', note.title);
+                    let docRef =  doc(db, 'notes' + currentUser.uid, note.title);
                     deleteDoc(docRef);
                     navigate('/', {replace:true})
                 }

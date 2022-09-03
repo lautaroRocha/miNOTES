@@ -1,13 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {useEffect, useCallback} from 'react'
 import '../styles/notes_grid.css'
 
 import MinNote from "./MinNote";
 
 function Favs(props){
+
+  const loggedUser = localStorage.getItem('user')
   const navigate = useNavigate();
-  const token = props.token;
 
   const handleKeyPress = useCallback((event) => {
     if (event.shiftKey === true) {
@@ -23,11 +24,7 @@ useEffect(() => {
     };
   }, [handleKeyPress]);
 
-  
-  if(!token){
-    navigate('/login', {replace: true})
-  }
-  else{
+
     return(  
             <div className="notes-grid">
                 {props.favs.map((note, idx) =>{
@@ -37,7 +34,7 @@ useEffect(() => {
                 })}
             </div>
             )
-    }
+  
 }
 
 export default Favs;

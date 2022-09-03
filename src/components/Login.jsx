@@ -1,13 +1,15 @@
-import React from "react";
+import React, {useEffect} from "react";
 import '../styles/login.css'
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged}
 from 'firebase/auth'
-import {useNavigate} from 'react-router-dom'
+import {Navigate, useNavigate} from 'react-router-dom'
 
 
 function Login(props) {
 
+const setUser = props.setUser;
 const navigate = useNavigate();
+
 const app = props.app;
 const auth = getAuth(app)
 
@@ -15,10 +17,7 @@ const loginInWithMailAndPass = async (e) => {
     e.preventDefault();
     const loginEmail = document.querySelector('#email').value;
     const loginPass = document.querySelector('#pass').value;
-
     const userCredentials = await signInWithEmailAndPassword(auth, loginEmail, loginPass)
-
-    console.log(userCredentials.user)
 
 }
 
@@ -33,19 +32,22 @@ const createAccount = async (e) => {
 
 }
 
-const monitorAuthState = async () => {
-    onAuthStateChanged(auth, user =>{
-        if (user){
-            navigate('/', {replace: true})
-            sessionStorage.setItem('token', true);
-        }else{
-            const msg = document.querySelector('#msg')
-            msg.textContent = "not logged in"
-        }
+const useMonitorAuthState = async () => {
+    useEffect(() =>{
+        onAuthStateChanged(auth, user =>{
+            if (user){
+                setUser(user)
+                localStorage.setItem('user', JSON.stringify(user));
+                navigate('/', {replace:true})
+            }
+        })
     })
+    
+    
 }
 
-monitorAuthState()
+
+useMonitorAuthState()
 
 
     return(

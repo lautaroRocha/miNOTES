@@ -1,24 +1,19 @@
 import React from "react";
 import MinNote from "./MinNote";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/notes_grid.css'
 
 /* eslint-disable no-unused-expressions */
 
 function NotesGrid(props) {
-    const navigate = useNavigate();
-    const token = props.token;
 
-    const [savedNotes, setSavedNotes] = useState([]);
 
-    const [erasedNote, setErasedNote] = useState(false);
+  const navigate = useNavigate();
+  const setErasedNote = props.setErasedNote
+  const [savedNotes, setSavedNotes] = useState([]);
 
-    useEffect(() => {
-        setErasedNote(false)
-        let savedArr = props.notes;
-        setSavedNotes(savedArr);
-    }, [erasedNote, setSavedNotes]);
+
 
     const handleKeyPress = useCallback((event) => {
       if (event.shiftKey === true) {
@@ -43,6 +38,7 @@ function NotesGrid(props) {
                 })}
             </div>
             )
+  
     }
   
 
