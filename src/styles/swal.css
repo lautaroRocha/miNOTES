@@ -1,6 +1,8 @@
 .swal-cont{
     background-color:#cfd8dc;
     color: #455a64;
+    fill: #455a64;
+    width: 40%;
 }
 
 .swal2-actions .confirm-btn{

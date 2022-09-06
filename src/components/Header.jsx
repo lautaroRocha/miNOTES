@@ -2,13 +2,19 @@ import React from "react";
 import '../styles/header.css'
 import { useNavigate, Link } from "react-router-dom";
 import { signOut, getAuth } from "firebase/auth";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 
 function Header(props) {
+    const MySwal = withReactContent(Swal);
     const user = localStorage.getItem('user')
     const setUser = props.setUser;
     const setNotes = props.setNotes;
     const auth = getAuth();
     const navigate = useNavigate();
+
+    const exitDoor = <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" ><path d="M11 21h8v-2l1-1v4h-9v2l-10-3v-18l10-3v2h9v5l-1-1v-3h-8v18zm10.053-9l-3.293-3.293.707-.707 4.5 4.5-4.5 4.5-.707-.707 3.293-3.293h-9.053v-1h9.053z"/></svg>;
 
     const addNote = () =>{
         navigate('/new', {replace: true})
@@ -19,19 +25,35 @@ function Header(props) {
         navigate('/fav', {replace: true}):
         navigate('/', {replace: true})
     }
-    const logOut = () =>{
+
+    const logOutAndReset = () =>{
         signOut(auth).then(() => {
             setNotes([]);
             localStorage.removeItem('user')
             setUser(null)
             navigate('/login', {replace: true})
-        }).catch((error) => {
-            console.log(error)
-          });
-         
+    })}
 
+    const logOut = () =>{
+        MySwal.fire({
+            customClass: {
+                confirmButton: "confirm-btn",
+                popup : "swal-cont",
+            },
+            confirmButtonText : <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff" viewBox="0 0 24 24"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg> ,
+            cancelButtonText :<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff"viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg> ,
+            title : exitDoor,
+            showCancelButton: true }
+        ).then( (result) => {
+            if(result.isConfirmed){
+                logOutAndReset()
+            }
+            }).catch( (error) =>{
+                console.log(error)
+            })
+        }
         
-    }
+         
     
     return(
         <div className="head">
@@ -50,7 +72,9 @@ function Header(props) {
                 <button onClick={addNote} className="new-btn">
                     +
                 </button>
-                <button className="logout" onClick={logOut}> log out</button>
+                <button className="logout" onClick={logOut}> 
+                   {exitDoor}
+                </button>
             </div>}
         </div>
     )
