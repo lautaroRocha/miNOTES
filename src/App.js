@@ -11,6 +11,7 @@ import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from "fireb
 import RequireAuth from './components/RequireAuth';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import 'animate.css'
 
 function App(props) {
 
@@ -18,12 +19,12 @@ function App(props) {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState(false)
   const [erasedNote, setErasedNote] = useState(false);
+  const [firstRend, setFirstRend] = useState(true)
 
   const loggedUser = localStorage.getItem('user');
   const currentUser = JSON.parse(loggedUser)
 
 
-  const MySwal = withReactContent(Swal)
 
 
   const db = getFirestore();
@@ -83,43 +84,30 @@ function App(props) {
     )
     }else{
       let docRef =  doc(db,'favs' + currentUser.uid, title);
-      MySwal.fire({
-          customClass: {
-              confirmButton: "confirm-btn",
-              popup : "swal-cont"
-          },
-          title : '¿🗑️?',
-          showCancelButton: true,
-          confirmButtonText : <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff" viewBox="0 0 24 24"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg> ,
-          cancelButtonText :<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff"viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg> ,
-          denyButtonText: `Don't save`
-      })
-      .then( (result) => {
-        if(result.isConfirmed){
-          deleteDoc(docRef) 
+      deleteDoc(docRef) 
         }
-      })
+      
     }
-    }
+    
 
 
 
   return (
   <BrowserRouter>
-      <Header setUser={setUser} user={user} setNotes={setNotes}/>
+      <Header setUser={setUser} user={user} setNotes={setNotes} />
     <div className="container">
     <Routes>
-      <Route path="/login" element={<Login user={user} app={props.app} setUser={setUser} />} />
+      <Route path="/login" element={<Login user={user} app={props.app} setUser={setUser} setFirstRend={setFirstRend} />} />
       <Route path="/new" element={
       <NewNote user={user} notes={notes} favs={favs} setNewNote={setNewNote}/>
       }/>
       <Route exact path="/" element={
         <RequireAuth  redirectTo="/login">
-          <NotesGrid user={user} notes={notes} setErasedNote={setErasedNote}  favs={favs} addOrRemoveFav={addOrRemoveFav}/>
+          <NotesGrid user={user} notes={notes} setFirstRend={setFirstRend} firstRend={firstRend} setErasedNote={setErasedNote} favs={favs} addOrRemoveFav={addOrRemoveFav}/>
         </RequireAuth>} />
       <Route path="/notes" element={
         <RequireAuth  redirectTo="/login">
-          <Note user={user} notes={notes} favs={favs}/>
+          <Note user={user} notes={notes} favs={favs} setNewNote={setNewNote}/>
           </RequireAuth>}/>
       <Route path="/fav" element={
        <RequireAuth  redirectTo="/login">

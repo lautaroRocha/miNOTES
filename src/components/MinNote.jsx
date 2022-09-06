@@ -1,13 +1,15 @@
-import React from "react"
-import { Link, useNavigate } from "react-router-dom"
+import React, {useState} from "react"
+import { Link} from "react-router-dom"
 import '../styles/notes_grid.css'
 import { getFirestore, doc, deleteDoc} from "firebase/firestore";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import '../styles/swal.css'
+import '../styles/spinner.css'
 
 
 function MinNote(props){
+
     const MySwal = withReactContent(Swal)
 
     const user = localStorage.getItem('user');
@@ -55,6 +57,8 @@ function MinNote(props){
             props.addOrRemoveFav();
         }
     }
+
+   
         return(
         <Link  to={`/notes?title=${props.note.title}&&from=${current}`}style={{textDecoration: "none"}} >
                     <div className="note"  style={{backgroundColor:`${props.note.color}`}}>
@@ -76,7 +80,7 @@ function MinNote(props){
                         props.note.body:
                         props.note.body.substring(0, 100)+"... "} disabled form="usrform"  className="new-note-body" ></textarea>
                     </div>
-                    </Link>
+        </Link>
     )
 }
 

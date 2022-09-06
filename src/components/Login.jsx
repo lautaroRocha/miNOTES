@@ -7,6 +7,7 @@ import {Navigate, useNavigate} from 'react-router-dom'
 
 function Login(props) {
 
+const setFirstRend = props.setFirstRend;
 const setUser = props.setUser;
 const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ const loginInWithMailAndPass = async (e) => {
     const loginEmail = document.querySelector('#email').value;
     const loginPass = document.querySelector('#pass').value;
     const userCredentials = await signInWithEmailAndPassword(auth, loginEmail, loginPass)
+    setFirstRend(true)
 
 }
 

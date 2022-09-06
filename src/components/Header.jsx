@@ -1,10 +1,9 @@
-import React, {useContext} from "react";
+import React from "react";
 import '../styles/header.css'
 import { useNavigate, Link } from "react-router-dom";
 import { signOut, getAuth } from "firebase/auth";
 
 function Header(props) {
-
     const user = localStorage.getItem('user')
     const setUser = props.setUser;
     const setNotes = props.setNotes;

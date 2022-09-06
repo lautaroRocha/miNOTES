@@ -9,6 +9,7 @@ function Note(props){
 
     const user = localStorage.getItem('user');
     const currentUser = JSON.parse(user);
+    const setNewNote = props.setNewNote;
     
     
     const MySwal = withReactContent(Swal)
@@ -70,6 +71,7 @@ function Note(props){
                     body : editedNote.body
                 }
                 ).then(
+                    setNewNote(true),
                     navigate('/', {replace:true})
                 )
             }else{
