@@ -1,0 +1,16 @@
+@import 'reset.css';
+
+.signature{
+    font-weight: bolder;
+    width: 100%;
+    text-align: center;
+}
+
+.signature p {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 30%;
+    margin: 0 auto;
+    padding: 1rem;
+}

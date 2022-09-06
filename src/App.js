@@ -12,6 +12,8 @@ import RequireAuth from './components/RequireAuth';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import 'animate.css'
+import Footer from './components/Footer';
+
 
 function App(props) {
 
@@ -115,6 +117,7 @@ function App(props) {
         </RequireAuth>}/>
     </Routes>
     </div>
+      <Footer />
   </BrowserRouter>
   );
 }
