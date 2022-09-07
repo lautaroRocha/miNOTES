@@ -23,6 +23,7 @@ function NotesGrid(props) {
   const [load, setLoad] = useState(false)
   const navigate = useNavigate();
   const setErasedNote = props.setErasedNote
+  const erasedNote = props.erasedNote;
 
   const handleKeyPress = useCallback((event) => {
       if (event.shiftKey === true) {
@@ -56,7 +57,7 @@ function NotesGrid(props) {
           <div className="notes-grid">   
             {props.notes.map((note, idx) =>{ 
             return( 
-              <MinNote note={note} key={idx} set={setErasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
+              <MinNote note={note} key={idx} set={setErasedNote} erasedNote={erasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
             )})}
           </div> 
       )

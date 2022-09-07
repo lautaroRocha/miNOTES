@@ -76,7 +76,6 @@ useMonitorAuthState()
             <a>OFFLINE VERSION</a>
         </form>
 
-        <Footer />
         </>
     )
 }

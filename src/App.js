@@ -12,6 +12,7 @@ import RequireAuth from './components/RequireAuth';
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import 'animate.css'
+import './styles/swal.css'
 import Footer from './components/Footer';
 
 
@@ -43,7 +44,8 @@ function App(props) {
       setNotes([])
       setNewNote(false)
     }
-  }, [erasedNote, newNote, user])
+    setErasedNote(false)
+  }, [setErasedNote, erasedNote, newNote, user])
 
   const [favs, setFavs] = useState([]);
 
@@ -96,7 +98,7 @@ function App(props) {
 
   return (
   <BrowserRouter>
-      {user && <Header setUser={setUser} user={user} setNotes={setNotes} />}
+    {currentUser && <Header setUser={setUser} user={user} setNotes={setNotes} />}
     <div className="container">
     <Routes>
       <Route path="/login" element={<Login user={user} app={props.app} setUser={setUser} setFirstRend={setFirstRend} />} />
@@ -105,7 +107,7 @@ function App(props) {
       }/>
       <Route exact path="/" element={
         <RequireAuth  redirectTo="/login">
-          <NotesGrid user={user} notes={notes} setFirstRend={setFirstRend} firstRend={firstRend} setErasedNote={setErasedNote} favs={favs} addOrRemoveFav={addOrRemoveFav}/>
+          <NotesGrid user={user} notes={notes} setFirstRend={setFirstRend} firstRend={firstRend} erasedNote={erasedNote} setErasedNote={setErasedNote} favs={favs} addOrRemoveFav={addOrRemoveFav}/>
         </RequireAuth>} />
       <Route path="/notes" element={
         <RequireAuth  redirectTo="/login">
@@ -117,7 +119,7 @@ function App(props) {
         </RequireAuth>}/>
     </Routes>
     </div>
-      {/* <Footer /> */}
+      <Footer />
   </BrowserRouter>
   );
 }

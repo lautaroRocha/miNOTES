@@ -30,7 +30,7 @@ function MinNote(props){
     }
 
     let setErasedNotes = props.set;
-
+    let erasedNote = props.erasedNote;
     const db = getFirestore();
 
     const dispose = (e) => {
