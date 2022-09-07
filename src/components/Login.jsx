@@ -3,7 +3,7 @@ import '../styles/login.css'
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged}
 from 'firebase/auth'
 import {Navigate, useNavigate} from 'react-router-dom'
-
+import Footer from "./Footer";
 
 function Login(props) {
 
@@ -54,13 +54,29 @@ useMonitorAuthState()
 
     return(
         <>
+            <div className="log-head">
+                <div className="log-dot"> 
+                <div className="log-title">miNOTE</div>
+                </div>
+            </div>
+
         <form action="">
             <span id="msg"></span>
-            <input id="email" className="login-mail" type="text" />
-            <input id="pass" className="login-pass" type="password" />
-            <button type='submit' onClick={loginInWithMailAndPass}> ok </button>
-            <button type='submit' onClick={createAccount}> create </button>
+         <div className="login-data">
+               <label htmlFor="email">Email:</label>
+               <input id="email" className="login-mail" type="text" />
+               <label htmlFor="pass">Password:</label>
+               <input id="pass" className="login-pass" type="password" />
+         </div>
+            <div className="login-btns">
+                <button type='submit' onClick={loginInWithMailAndPass}> ok </button>
+                <button type='submit' onClick={createAccount}> create </button>
+            </div>
+
+            <a>OFFLINE VERSION</a>
         </form>
+
+        <Footer />
         </>
     )
 }

@@ -1,11 +1,110 @@
 @import 'reset.css';
 
+.log-head{
+    position: relative;
+    top: 30px;
+    z-index: 2;
+}
+.log-dot{
+    width: clamp(80px, 20vw, 120px);
+    height: clamp(80px, 20vw, 120px);
+    border-radius: 50%;
+    background-color: #455e64;
+    display: grid;
+    place-items: center;
+}
+.log-title{
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    font-size: clamp(1rem, 4.3vw, 1.6rem);
+    font-weight: bolder;
+}
+
+
 form {
+    border: 2px solid #455e64;
+    
+    color: #455e64;
+    border-radius: 25px;
+    width: 80%;
+    max-width: 800px;
+    max-height: 50vh;
+    padding: 3rem 0;
+
+    position: relative;
+    top: -27px;
+    z-index: 0;
+
     display : flex;
     flex-direction: column;
-    gap: .5rem;
-    background-color: #455e64;
-    padding: 5rem;
+    gap: 2rem;
+    align-items: center;
+    text-align: center;
+}
+@media(max-width:566px){
+    form{
+        top: -25px;
+    }
+}
+@media(max-width:466px){
+    form{
+        top: -15px;
+    }
+}
+@media(max-width:366px){
+    form{
+        top: -5px;
+    }
+}
+
+.login-data{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+.login-data label{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+.login-data input {
+    font-size: 1rem;
+    border: none;
+    background-color: transparent;
+    padding: .5rem;
     border-radius: 15px;
+}
+
+form input:focus{
+    outline: 2px solid #455e64;
+}
+
+form .login-btns{
+    display: flex;
+    width: 40%;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+}
+
+form .login-btns button{
+    border: none;
+    color: #455e64;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    border-radius: 20%;
+}
+
+form .login-btns button:hover{
+    cursor: pointer;
+    filter: drop-shadow(0px 0px 15px #3d3d3d);
+}
+
+form .login-btns button:active{
+    cursor: pointer;
+    filter: drop-shadow(0px 0px 5px #b2b2b2);
 }
 

@@ -96,7 +96,7 @@ function App(props) {
 
   return (
   <BrowserRouter>
-      <Header setUser={setUser} user={user} setNotes={setNotes} />
+      {user && <Header setUser={setUser} user={user} setNotes={setNotes} />}
     <div className="container">
     <Routes>
       <Route path="/login" element={<Login user={user} app={props.app} setUser={setUser} setFirstRend={setFirstRend} />} />
@@ -117,7 +117,7 @@ function App(props) {
         </RequireAuth>}/>
     </Routes>
     </div>
-      <Footer />
+      {/* <Footer /> */}
   </BrowserRouter>
   );
 }
