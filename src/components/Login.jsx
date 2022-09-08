@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import '../styles/login.css'
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged}
 from 'firebase/auth'
-import {Navigate, useNavigate} from 'react-router-dom'
+import {Navigate, useNavigate, Link} from 'react-router-dom'
 import Footer from "./Footer";
 
 function Login(props) {
@@ -69,8 +69,8 @@ useMonitorAuthState()
                <input id="pass" className="login-pass" type="password" />
          </div>
             <div className="login-btns">
-                <button type='submit' onClick={loginInWithMailAndPass}> ok </button>
-                <button type='submit' onClick={createAccount}> create </button>
+                <button type='submit' onClick={loginInWithMailAndPass}>login</button>
+                <Link to="">register</Link>
             </div>
 
             <a>OFFLINE VERSION</a>

@@ -29,7 +29,7 @@ form {
     border-radius: 25px;
     width: 80%;
     max-width: 800px;
-    max-height: 50vh;
+    max-height: 80vh;
     padding: 3rem 0;
 
     position: relative;
@@ -58,6 +58,8 @@ form {
     }
 }
 
+/* USER DATA (EMAIL; PASS) */
+
 .login-data{
     display: flex;
     flex-direction: column;
@@ -76,18 +78,20 @@ form {
     padding: .5rem;
     border-radius: 15px;
 }
-
 form input:focus{
     outline: 2px solid #455e64;
 }
-
 form .login-btns{
     display: flex;
     width: 40%;
     justify-content: space-around;
     margin-bottom: 2rem;
 }
-
+@media(max-width:650px){
+    form .login-btns{
+        flex-direction: column;
+    }
+}
 form .login-btns button{
     border: none;
     color: #455e64;
@@ -97,7 +101,22 @@ form .login-btns button{
     text-transform: uppercase;
     border-radius: 20%;
 }
+form .login-btns a{
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #455e64;
+}
 
+@media(max-width:650px){
+form .login-btns a{
+    font-size: 1rem;
+    padding-top: 2rem;
+    height: 1rem;
+    font-weight: 400;
+}
+}
 form .login-btns button:hover{
     cursor: pointer;
     filter: drop-shadow(0px 0px 15px #3d3d3d);
