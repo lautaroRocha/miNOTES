@@ -29,7 +29,7 @@ form {
     border-radius: 25px;
     width: 80%;
     max-width: 800px;
-    max-height: 80vh;
+    max-height: 800px;
     padding: 3rem 0;
 
     position: relative;
@@ -38,7 +38,7 @@ form {
 
     display : flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
     align-items: center;
     text-align: center;
 }
@@ -85,7 +85,8 @@ form .login-btns{
     display: flex;
     width: 40%;
     justify-content: space-around;
-    margin-bottom: 2rem;
+    margin: 1rem auto;
+    align-items: center;
 }
 @media(max-width:650px){
     form .login-btns{
@@ -108,7 +109,6 @@ form .login-btns a{
     font-weight: 400;
     color: #455e64;
 }
-
 @media(max-width:650px){
 form .login-btns a{
     font-size: 1rem;
@@ -121,9 +121,19 @@ form .login-btns button:hover{
     cursor: pointer;
     filter: drop-shadow(0px 0px 15px #3d3d3d);
 }
-
 form .login-btns button:active{
     cursor: pointer;
     filter: drop-shadow(0px 0px 5px #b2b2b2);
 }
 
+form .login-go {
+    display: flex;
+    height: fit-content;
+    align-items: center;
+}
+form .login-go:hover{
+    cursor: pointer;
+}
+form a{
+
+}

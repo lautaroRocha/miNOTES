@@ -119,7 +119,6 @@ function App(props) {
         </RequireAuth>}/>
     </Routes>
     </div>
-      <Footer />
   </BrowserRouter>
   );
 }
