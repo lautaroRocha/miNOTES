@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useCallback } from "react";
 import '../styles/new_note.css'
 import { getFirestore, setDoc, doc} from 'firebase/firestore'
+import '../styles/swal.css'
 
 function NewNote(props){
 

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { updateDoc, getFirestore, doc, deleteDoc} from "firebase/firestore";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import '../styles/swal.css'
 
 function Note(props){
 

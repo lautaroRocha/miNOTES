@@ -1,8 +1,9 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import '../styles/login.css'
 import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup}
 from 'firebase/auth'
 import { useNavigate, Link} from 'react-router-dom'
+import '../styles/swal.css'
 
 
 
@@ -55,7 +56,9 @@ function Icon() {
 
 function Login(props) {
 
-    
+const emailInput = useRef()
+const passInput = useRef();
+
 const provider = new GoogleAuthProvider();
 
 const setFirstRend = props.setFirstRend;
@@ -69,8 +72,19 @@ const loginInWithMailAndPass = async (e) => {
     e.preventDefault();
     const loginEmail = document.querySelector('#email').value;
     const loginPass = document.querySelector('#pass').value;
-    const userCredentials = await signInWithEmailAndPassword(auth, loginEmail, loginPass)
-    setFirstRend(true)
+    signInWithEmailAndPassword(auth, loginEmail, loginPass)
+      .then(
+        setFirstRend(true)
+      ).catch( (error) =>{
+        const er = JSON.stringify(error)
+        console.log(er)
+        if(er.includes("user-not-found")||er.includes('invalid-email')){
+        showError('email')
+      }else if(er.includes("wrong-password")){
+        showError('password')
+      }
+    }
+      )
 
 }
 
@@ -118,7 +132,25 @@ const useMonitorAuthState = async () => {
     
 }
 
+const showError = (input) =>{
+  if(input === 'email'){
+  emailInput.current.style.outline = "solid	#8B0000"
+  }else if(input === 'password'){
+    passInput.current.style.outline = "solid	#8B0000"
+  }else{
+    passInput.current.style.outline = "solid #8B0000"
+    emailInput.current.style.outline = "solid	#8B0000"
+  }
+}
 
+const showOrHidePass = () =>{
+  let type = passInput.current.type;
+  type === "password" ?
+    passInput.current.type = "text"
+  :
+    passInput.current.type = "password"
+
+}
 useMonitorAuthState()
 
 
@@ -131,12 +163,11 @@ useMonitorAuthState()
             </div>
 
         <form action="">
-            <span id="msg"></span>
          <div className="login-data">
                <label htmlFor="email">Email:</label>
-               <input id="email" className="login-mail" type="text" />
+               <input  id="email" className="login-mail" type="text" ref={emailInput} /> 
                <label htmlFor="pass">Password:</label>
-               <input id="pass" className="login-pass" type="password" />
+               <input id="pass" className="login-pass" type="password" ref={passInput}></input> <svg onClick={showOrHidePass} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z"/></svg>
          </div>
             <div className="login-btns">
                 <button type='submit' onClick={loginInWithMailAndPass}>login</button>

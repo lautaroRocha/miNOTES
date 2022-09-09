@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { signOut, getAuth } from "firebase/auth";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import '../styles/swal.css'
 
 
 function Header(props) {

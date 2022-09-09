@@ -4,6 +4,11 @@
     fill: #455a64;
     width: 40%;
 }
+@media(max-width:600px){
+    .swal-cont{
+        max-width: 250px;
+    }
+}
 
 .swal2-actions .confirm-btn{
     background-color: #455a64;

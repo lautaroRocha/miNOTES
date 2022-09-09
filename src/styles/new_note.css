@@ -9,7 +9,14 @@
     display: flex;
     flex-direction: column;
 }
-
+@media(max-width: 600px){
+    .new-note{
+        max-height: 70vh;
+    }
+}
+.new-note #colorPicker{
+    background-color: #fff;
+}
 .new-note .new-note-title {
     margin: 1rem auto 0;
     height: 5%;
