@@ -9,6 +9,7 @@ import Login from './components/Login';
 import {useEffect, useState} from 'react'
 import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from "firebase/firestore";
 import RequireAuth from './components/RequireAuth';
+import Register from './components/Register.jsx'
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import 'animate.css'
@@ -102,8 +103,9 @@ function App(props) {
     <div className="container">
     <Routes>
       <Route path="/login" element={<Login user={user} app={props.app} setUser={setUser} setFirstRend={setFirstRend} />} />
+      <Route path="/register" element={<Register setUser={setUser} setFirstRend={setFirstRend}/>} />
       <Route path="/new" element={
-      <NewNote user={user} notes={notes} favs={favs} setNewNote={setNewNote}/>
+      <NewNote user={user} notes={notes} favs={favs} setNewNote={setNewNote} app={props.app}/>
       }/>
       <Route exact path="/" element={
         <RequireAuth  redirectTo="/login">

@@ -20,6 +20,10 @@
     font-size: clamp(1rem, 4.3vw, 1.6rem);
     font-weight: bolder;
 }
+.log-title a{
+    text-decoration: none;
+    color: inherit;
+}
 
 
 form {
@@ -75,7 +79,7 @@ form {
 .login-data input {
     font-size: 1rem;
     border: none;
-    background-color: transparent;
+    background-color: #e6e6e6;
     padding: .5rem;
     border-radius: 15px;
 }
@@ -97,7 +101,6 @@ form .login-btns{
     display: flex;
     width: 40%;
     justify-content: space-around;
-    margin: 1rem auto;
     align-items: center;
 }
 @media(max-width:650px){
@@ -105,7 +108,7 @@ form .login-btns{
         flex-direction: column;
     }
 }
-form .login-btns button{
+form .login-btns button, .log-reg {
     border: none;
     color: #455e64;
     background-color: transparent;
@@ -114,15 +117,18 @@ form .login-btns button{
     text-transform: uppercase;
     border-radius: 20%;
 }
-form .login-btns a{
+form .login-btns span{
     text-decoration: none;
     text-transform: uppercase;
     font-size: 1rem;
     font-weight: 400;
     color: #455e64;
 }
+form .login-btns span:hover{
+    cursor: pointer;
+}
 @media(max-width:650px){
-form .login-btns a{
+form .login-btns span{
     font-size: 1rem;
     padding-top: 2rem;
     height: 1rem;
@@ -131,11 +137,10 @@ form .login-btns a{
 }
 form .login-btns button:hover{
     cursor: pointer;
-    filter: drop-shadow(0px 0px 15px #3d3d3d);
 }
 form .login-btns button:active{
     cursor: pointer;
-    filter: drop-shadow(0px 0px 5px #b2b2b2);
+    filter: drop-shadow(0px 0px 15px #3d3d3d);
 }
 
 form .login-go {
@@ -147,5 +152,33 @@ form .login-go:hover{
     cursor: pointer;
 }
 form a{
+    text-decoration: none;
+    color: #455e64;
+}
 
+
+
+
+/* REGISTER STYLES */
+
+.password-column{
+    display: flex;
+    gap: 1rem;
+}
+@media(max-width:700px){
+    .password-column{
+        display: flex;
+        flex-direction: column;
+        gap:0px;
+        
+    }
+}
+
+.password-column div{
+    display: flex;
+    flex-direction: column;
+}
+.password-column div svg{
+    top: -30px;
+    left: 150px;
 }

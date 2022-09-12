@@ -76,11 +76,10 @@ function NotesGrid(props) {
       )
     }
   }
-
-
-
     return(
-      display()
+      <>
+     { display()}
+      </>
     )
     }
   
