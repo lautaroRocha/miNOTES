@@ -2,6 +2,7 @@ import React from "react";
 import MinNote from "./MinNote";
 import Footer from './Footer'
 import { useState, useEffect, useCallback, useRef } from "react";
+
 import { useNavigate } from "react-router-dom";
 import '../styles/notes_grid.css'
 import '../styles/spinner.css'
@@ -17,7 +18,6 @@ function LoadingSpinner(){
       </div>
   )
 }
-
 
 
 function NotesGrid(props) {

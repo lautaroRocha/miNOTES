@@ -7,6 +7,7 @@ import Note from './components/Note.jsx'
 import Favs from './components/Favs';
 import Login from './components/Login';
 import {useEffect, useState} from 'react'
+
 import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from "firebase/firestore";
 import RequireAuth from './components/RequireAuth';
 import Register from './components/Register.jsx'
@@ -33,6 +34,8 @@ function App(props) {
 
   const db = getFirestore();
 
+  const MySwal = withReactContent(Swal)
+  
   useEffect(() => {
     if(currentUser){
     let notesColl = collection(db,  'notes' + currentUser.uid);
@@ -63,6 +66,7 @@ function App(props) {
   })
 
 
+
   const addOrRemoveFav = (e) =>{
     e.preventDefault();
 
@@ -91,9 +95,9 @@ function App(props) {
       let docRef =  doc(db,'favs' + currentUser.uid, title);
       deleteDoc(docRef) 
         }
-      
     }
     
+
 
 
 

@@ -5,6 +5,7 @@ import '../styles/new_note.css'
 import { getFirestore, setDoc, doc} from 'firebase/firestore'
 import '../styles/swal.css'
 
+
 function NewNote(props){
 
     const user = localStorage.getItem('user');
@@ -12,6 +13,7 @@ function NewNote(props){
     const setNewNote = props.setNewNote
 
     const navigate = useNavigate();
+
     const cancel = () =>{
         navigate('/', {replace:true})
     }
@@ -44,6 +46,7 @@ function NewNote(props){
     const handleKeyPress = useCallback((event) => {
         if (event.shiftKey === true) {
           event.key === 'Enter' && add();
+          event.key === 's' || event.key === 'S' && add();
           event.key === 'Backspace' && cancel();
         }
       }, []);

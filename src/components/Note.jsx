@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import '../styles/swal.css'
 
+
 function Note(props){
 
     const user = localStorage.getItem('user');
@@ -17,7 +18,7 @@ function Note(props){
 
 
     const navigate = useNavigate();
-
+    const MySwal = withReactContent(Swal)
     const [savedNotes, setSavedNotes] = useState(props.notes);
 
     useEffect(() => {
@@ -25,10 +26,11 @@ function Note(props){
         setSavedNotes(savedArr);
     }, [savedNotes])
 
+
     let params = new URLSearchParams(document.location.search)
     let title = params.get('title')
     let origin = params.get('from')
-    
+   
     let note = props.notes.find(note => note.title === title);
     let noteIdx = props.notes.indexOf(note);
 
@@ -106,6 +108,7 @@ function Note(props){
                 }
             }
     })}
+
 
     const handleKeyPress = useCallback((event) => {
         if (event.shiftKey === true) {

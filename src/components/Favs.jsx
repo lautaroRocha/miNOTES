@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {useEffect, useCallback} from 'react'
+
 import '../styles/notes_grid.css'
 
 import MinNote from "./MinNote";
@@ -23,8 +24,6 @@ useEffect(() => {
       document.removeEventListener('keydown', handleKeyPress);
     };
   }, [handleKeyPress]);
-
-
     return(  
             <div className="notes-grid">
                 {props.favs.map((note, idx) =>{
