@@ -1,0 +1,184 @@
+@import 'reset.css';
+
+.log-head{
+    position: relative;
+    top: 30px;
+    z-index: 2;
+}
+.log-dot{
+    width: clamp(80px, 20vw, 120px);
+    height: clamp(80px, 20vw, 120px);
+    border-radius: 50%;
+    background-color: #455e64;
+    display: grid;
+    place-items: center;
+}
+.log-title{
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    font-size: clamp(1rem, 4.3vw, 1.6rem);
+    font-weight: bolder;
+}
+.log-title a{
+    text-decoration: none;
+    color: inherit;
+}
+
+
+form {
+    border: 2px solid #455e64;
+    
+    color: #455e64;
+    border-radius: 25px;
+    width: 80%;
+    max-width: 800px;
+    max-height: 800px;
+    padding: 3rem 0;
+
+    position: relative;
+    top: -27px;
+    z-index: 0;
+
+    display : flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    text-align: center;
+}
+@media(max-width:566px){
+    form{
+        top: -25px;
+    }
+}
+@media(max-width:466px){
+    form{
+        top: -15px;
+    }
+}
+@media(max-width:366px){
+    form{
+        top: -5px;
+    }
+}
+
+/* USER DATA (EMAIL; PASS) */
+
+.login-data{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    margin-top: 1rem;
+}
+.login-data label{
+    font-size: 1rem;
+    font-weight: bolder;
+}
+.login-data input {
+    font-size: 1rem;
+    border: none;
+    background-color: #e6e6e6;
+    padding: .5rem;
+    border-radius: 15px;
+}
+form .login-data svg{
+    fill: #b2b2b2;
+    position: relative;
+    top: -40px;
+    left: 70px;
+    opacity: 0.5;
+}
+form .login-data svg:hover{
+    opacity: 1;
+    cursor: pointer;
+}
+form input:focus{
+    outline: 2px solid #455e64;
+}
+form .login-btns{
+    display: flex;
+    width: 40%;
+    justify-content: space-around;
+    align-items: center;
+}
+@media(max-width:650px){
+    form .login-btns{
+        flex-direction: column;
+    }
+}
+form .login-btns button, .log-reg {
+    border: none;
+    color: #455e64;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    border-radius: 20%;
+}
+form .login-btns span{
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #455e64;
+}
+form .login-btns span:hover{
+    cursor: pointer;
+}
+@media(max-width:650px){
+form .login-btns span{
+    font-size: 1rem;
+    padding-top: 2rem;
+    height: 1rem;
+    font-weight: 400;
+}
+}
+form .login-btns button:hover{
+    cursor: pointer;
+}
+form .login-btns button:active{
+    cursor: pointer;
+    filter: drop-shadow(0px 0px 15px #3d3d3d);
+}
+
+form .login-go {
+    display: flex;
+    height: fit-content;
+    align-items: center;
+}
+form .login-go:hover{
+    cursor: pointer;
+}
+form a{
+    text-decoration: none;
+    color: #455e64;
+}
+
+
+
+
+/* REGISTER STYLES */
+
+.password-column{
+    display: flex;
+    gap: 1rem;
+}
+@media(max-width:700px){
+    .password-column{
+        display: flex;
+        flex-direction: column;
+        gap:0px;
+        
+    }
+}
+
+.password-column div{
+    display: flex;
+    flex-direction: column;
+}
+.password-column div svg{
+    top: -30px;
+    left: 150px;
+}

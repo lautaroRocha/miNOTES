@@ -1,46 +1,86 @@
 import React from "react";
 import MinNote from "./MinNote";
-import { useState, useEffect, useCallback } from "react";
+import Footer from './Footer'
+import { useState, useEffect, useCallback, useRef } from "react";
+
 import { useNavigate } from "react-router-dom";
 import '../styles/notes_grid.css'
+import '../styles/spinner.css'
+import '../styles/swal.css'
+
+/* eslint-disable no-unused-expressions */
+
+function LoadingSpinner(){
+  return(
+      <div className="spinner-container">
+          <div className="loading-spinner">
+          </div>
+      </div>
+  )
+}
+
 
 function NotesGrid(props) {
+  const firstRend = props.firstRend;
+  const setFirstRend = props.setFirstRend;
+  const [load, setLoad] = useState(false)
+  const navigate = useNavigate();
+  const setErasedNote = props.setErasedNote
+  const erasedNote = props.erasedNote;
 
-    const navigate = useNavigate();
+  const handleKeyPress = useCallback((event) => {
+      if (event.shiftKey === true) {
+        event.key === 'n' || event.key === 'N' && navigate('/new', {replace:true});
+        event.key === 'f' || event.key === 'F' && navigate('/fav', {replace:true})
+      }
+    }, []);
+
+  useEffect(() => {
+      document.addEventListener('keydown', handleKeyPress);
+      return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      };
+    }, [handleKeyPress]);
+
+  useEffect( () => {
+    setTimeout(function(){
+        setLoad(true)
+        setFirstRend(false);
+    }, 2500)
+  })
     
-    const [savedNotes, setSavedNotes] = useState([]);
-
-    const [erasedNote, setErasedNote] = useState(false);
-
-    useEffect(() => {
-        setErasedNote(false)
-        let savedArr = props.notes;
-        setSavedNotes(savedArr);
-    }, [erasedNote, savedNotes])
-
-    const handleKeyPress = useCallback((event) => {
-        if (event.shiftKey === true) {
-          event.key === 'n' || event.key === 'N' && navigate('/new', {replace:true});
-          event.key === 'f' || event.key === 'F' && navigate('/fav', {replace:true})
-        }
-      }, []);
-
-    useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress);
-        return () => {
-          document.removeEventListener('keydown', handleKeyPress);
-        };
-      }, [handleKeyPress]);
-    
+  function display(){
+    if(firstRend){
+      if(!load){
+        return(
+          <LoadingSpinner />
+        )
+      }else{
         return(  
-            <div className="notes-grid">
-                {savedNotes.map((note, idx) =>{
-                    return(
-                        <MinNote note={note} key={idx} notes={props.notes} set={setErasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
-                        )
-                })}
-            </div>
-            )
+          <div className="notes-grid">   
+            {props.notes.map((note, idx) =>{ 
+            return( 
+              <MinNote note={note} key={idx} set={setErasedNote} erasedNote={erasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
+            )})}
+          </div> 
+      )
+      }
+    }else{
+      return(
+        <div className="notes-grid">   
+            {props.notes.map((note, idx) =>{ 
+            return( 
+              <MinNote note={note} key={idx} set={setErasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
+            )})}
+          </div>
+      )
+    }
+  }
+    return(
+      <>
+     { display()}
+      </>
+    )
     }
   
 

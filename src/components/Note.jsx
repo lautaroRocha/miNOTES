@@ -1,10 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
+import { updateDoc, getFirestore, doc, deleteDoc} from "firebase/firestore";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import '../styles/swal.css'
+
 
 function Note(props){
+
+    const user = localStorage.getItem('user');
+    const currentUser = JSON.parse(user);
+    const setNewNote = props.setNewNote;
+    
+    
+    const MySwal = withReactContent(Swal)
+
+
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal)
     const [savedNotes, setSavedNotes] = useState(props.notes);
@@ -14,21 +26,21 @@ function Note(props){
         setSavedNotes(savedArr);
     }, [savedNotes])
 
-    
+
     let params = new URLSearchParams(document.location.search)
     let title = params.get('title')
     let origin = params.get('from')
-    
-    let notesArray = props.notes;
-
+   
     let note = props.notes.find(note => note.title === title);
     let noteIdx = props.notes.indexOf(note);
+
+
+    const db = getFirestore();
 
     if(origin === "/fav"){
         note = props.favs.find(note => note.title === title)
         noteIdx = props.favs.indexOf(note);
     }  
-    
     const edit = () =>{
         const titleToEdit = document.querySelector('.new-note-title')
         const editableTitle = document.createElement("textarea");
@@ -48,18 +60,29 @@ function Note(props){
         let title = document.querySelector('.new-note-title').value;
         let body = document.querySelector('.new-note-body').value;
         let col = note.col;
+        const noteRef = doc(db, "notes" + currentUser.uid, note.title)
         let editedNote = {
             title, body,col
         };
-        if(!title || !body){
+        if(title === note.title && body === note.body){
             origin !== '/fav' && navigate('/', {replace:true});
             origin === '/fav' && navigate('/fav', {replace:true})
-
         }else{
-        notesArray.splice(noteIdx, 1, editedNote);
-        localStorage.setItem('notes', JSON.stringify(notesArray));
-        navigate('/', {replace:true})}
+            if(origin !== '/fav'){
+                updateDoc(noteRef, {
+                    title : editedNote.title,
+                    body : editedNote.body
+                }
+                ).then(
+                    setNewNote(true),
+                    navigate('/', {replace:true})
+                )
+            }else{
+                navigate('/', {replace:true})
+            }
+        }
     }
+
     const dispose = () => {
         MySwal.fire({
             customClass: {
@@ -72,15 +95,20 @@ function Note(props){
             cancelButtonText :<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff"viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg> ,
             denyButtonText: `Don't save`
         })
-            .then( (result) =>{
-                if(result.isConfirmed){
-                    notesArray.splice(noteIdx, 1);
-                    localStorage.setItem('notes', JSON.stringify(notesArray));
+        .then( (result) =>{
+            if(result.isConfirmed){
+                if(origin === "/fav"){
+                    let docRef =  doc(db, 'favs', note.title);
+                    deleteDoc(docRef);
                     navigate('/', {replace:true})
-                } 
-            })
-        
-    }
+                }else{
+                    let docRef =  doc(db, 'notes' + currentUser.uid, note.title);
+                    deleteDoc(docRef);
+                    navigate('/', {replace:true})
+                }
+            }
+    })}
+
 
     const handleKeyPress = useCallback((event) => {
         if (event.shiftKey === true) {
@@ -102,8 +130,7 @@ function Note(props){
     while(note !== null & note !== undefined){
         return(
             <>
-      
-             <div  className="new-note" style={{backgroundColor:`${note.col}`}}  > 
+             <div  className="new-note" style={{backgroundColor:`${note.color}`}}  > 
                <textarea disabled value={note.title} className="new-note-title">
                </textarea>
                <textarea disabled value={note.body} form="usrform" className="new-note-body">
@@ -125,7 +152,6 @@ function Note(props){
             </>
         )
     }
-
 }
 
 export default Note;
