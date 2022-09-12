@@ -5,72 +5,46 @@ import NewNote from './components/NewNote.jsx'
 import NotesGrid from './components/NotesGrid.jsx'
 import Note from './components/Note.jsx'
 import Favs from './components/Favs';
-import Login from './components/Login';
 import {useEffect, useState} from 'react'
-
-import { collection, getFirestore, getDocs, doc, setDoc, deleteDoc } from "firebase/firestore";
-import RequireAuth from './components/RequireAuth';
-import Register from './components/Register.jsx'
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import 'animate.css'
-import './styles/swal.css'
-import Footer from './components/Footer';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 
-function App(props) {
-
-  const [user, setUser] = useState(null);
+function App() {
   const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState(false)
-  const [erasedNote, setErasedNote] = useState(false);
-  const [firstRend, setFirstRend] = useState(true)
-
-  const loggedUser = localStorage.getItem('user');
-  const currentUser = JSON.parse(loggedUser)
-
-
-
-
-  const db = getFirestore();
 
   const MySwal = withReactContent(Swal)
   
   useEffect(() => {
-    if(currentUser){
-    let notesColl = collection(db,  'notes' + currentUser.uid);
-    getDocs(notesColl)
-    .then((item) => {
-        let savedArr  = item.docs.map((note) => note.data())
-        setNotes(savedArr);
-        setNewNote(false)
-    })}else{
-      setNotes([])
-      setNewNote(false)
-    }
-    setErasedNote(false)
-  }, [setErasedNote, erasedNote, newNote, user])
+      const notesInLocal = localStorage.getItem('notes');
+      if(notesInLocal !==null){
+        const notesArray = JSON.parse(notesInLocal)
+        setNotes(notesArray);
+      }
+  }
+  , [])
 
   const [favs, setFavs] = useState([]);
 
   useEffect(() => {
-    const loggedUser = localStorage.getItem('user');
-    const currentUser = JSON.parse(loggedUser)
-    if(loggedUser){
-    let favsColl = collection(db,  'favs' + currentUser.uid);
-    getDocs(favsColl)
-    .then((item) => {
-        let favsArr  = item.docs.map((note) => note.data())
-        setFavs(favsArr);
-    })}
-  })
-
+      const favsInLocal = localStorage.getItem('favs');
+      if(favsInLocal !==null){
+        const favsArray = JSON.parse(favsInLocal)
+        setFavs(favsArray);
+      }
+  }
+  , [])
 
 
   const addOrRemoveFav = (e) =>{
     e.preventDefault();
-
-    const tempFavs = favs;
+    let savedFavs = localStorage.getItem('favs');
+    let tempFavs;
+    if(savedFavs == null){
+      tempFavs = [];
+    }else{
+      tempFavs = JSON.parse(savedFavs)
+    }
     
     let parent = e.target.parentElement
     let targetZone = parent.parentElement;
@@ -79,52 +53,35 @@ function App(props) {
     let title = targetNoteNote.querySelector('.new-note-title').textContent;
     let body = targetNoteNote.querySelector('.new-note-body').textContent;
     let col = targetNote.style.backgroundColor;
-  
+    let favNote = {
+      title, body, col
+    }
 
-    let noteIsFav = tempFavs.find( oneNote =>{return oneNote.title === title})
+    let noteIsFav = tempFavs.find( oneNote =>{return oneNote.title === favNote.title})
 
     if(!noteIsFav){
-      setDoc(doc(db, 'favs' + currentUser.uid, title), {
-        title : title,
-        body : body,
-        color : col
-    }).then(
-        console.log('ya po')
-    )
+        tempFavs.push(favNote)
+        localStorage.setItem('favs', JSON.stringify(tempFavs));
+        setFavs(tempFavs)
     }else{
-      let docRef =  doc(db,'favs' + currentUser.uid, title);
-      deleteDoc(docRef) 
-        }
+        let notesLeft = tempFavs.filter(note => { return note.title !== favNote.title;})
+        localStorage.setItem('favs', JSON.stringify(notesLeft))
+        setFavs(notesLeft)
+      }
     }
-    
-
-
 
 
   return (
   <BrowserRouter>
-    {currentUser && <Header setUser={setUser} user={user} setNotes={setNotes} />}
-    <div className="container">
-    <Routes>
-      <Route path="/login" element={<Login user={user} app={props.app} setUser={setUser} setFirstRend={setFirstRend} />} />
-      <Route path="/register" element={<Register setUser={setUser} setFirstRend={setFirstRend}/>} />
-      <Route path="/new" element={
-      <NewNote user={user} notes={notes} favs={favs} setNewNote={setNewNote} app={props.app}/>
-      }/>
-      <Route exact path="/" element={
-        <RequireAuth  redirectTo="/login">
-          <NotesGrid user={user} notes={notes} setFirstRend={setFirstRend} firstRend={firstRend} erasedNote={erasedNote} setErasedNote={setErasedNote} favs={favs} addOrRemoveFav={addOrRemoveFav}/>
-        </RequireAuth>} />
-      <Route path="/notes" element={
-        <RequireAuth  redirectTo="/login">
-          <Note user={user} notes={notes} favs={favs} setNewNote={setNewNote}/>
-          </RequireAuth>}/>
-      <Route path="/fav" element={
-       <RequireAuth  redirectTo="/login">
-        <Favs user={user} notes={notes} favs={favs} addOrRemoveFav={addOrRemoveFav}/>
-        </RequireAuth>}/>
-    </Routes>
-    </div>
+    <Header />
+  <div className="container">
+   <Routes>
+    <Route path="/new" element={<NewNote notes={notes} favs={favs}/>}/>
+    <Route exact path="/" element={<NotesGrid notes={notes}  favs={favs} addOrRemoveFav={addOrRemoveFav}/>} />
+    <Route path="/notes" element={<Note notes={notes} favs={favs}/>}/>
+    <Route path="/fav" element={<Favs notes={notes} favs={favs} addOrRemoveFav={addOrRemoveFav}/>}/>
+   </Routes>
+  </div>
   </BrowserRouter>
   );
 }

@@ -1,51 +1,37 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useCallback } from "react";
 import '../styles/new_note.css'
-import { getFirestore, setDoc, doc} from 'firebase/firestore'
-import '../styles/swal.css'
-
+import { useEffect, useCallback } from "react";
 
 function NewNote(props){
-
-    const user = localStorage.getItem('user');
-    const currentUser = JSON.parse(user)
-    const setNewNote = props.setNewNote
-
     const navigate = useNavigate();
 
     const cancel = () =>{
         navigate('/', {replace:true})
     }
     const add = () =>{
-        const db = getFirestore()
-        
+        let notes = props.notes;
         let title = document.querySelector('.new-note-title').value;
         let body = document.querySelector('.new-note-body').value;
         let col = document.querySelector('#colorPicker').value
-
+        let note = {
+            title, body, col
+        };
         if(!title || !body){
             alert('vacío')
         }else{
-        setDoc(doc(db, 'notes' + currentUser.uid, title), {
-            title : title,
-            body : body,
-            color : col
-        }).then(
-            setNewNote(true),
-            console.log('ya po')
-        )
+        notes.push(note)
+        localStorage.setItem('notes', JSON.stringify(notes));
         navigate('/', {replace:true})
         }
     }
-    const colourCard = (e) => {
+    function colourCard(e){
         let card = document.querySelector(".new-note")
         card.style.backgroundColor = e.target.value;
     }
 
     const handleKeyPress = useCallback((event) => {
         if (event.shiftKey === true) {
-          event.key === 'Enter' && add();
           event.key === 's' || event.key === 'S' && add();
           event.key === 'Backspace' && cancel();
         }
@@ -83,6 +69,9 @@ function NewNote(props){
                 </datalist>
             <button className="add" onClick={add}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg>
+                
+
+
             </button>
            </div>
         </div>

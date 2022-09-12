@@ -40,7 +40,7 @@ section{
 }
 .note-actions{
     display: flex;
-    height: fit-content;
+    height: 1rem;
     gap: 1rem;
     transition: opacity .5s;
     opacity: 0.35;

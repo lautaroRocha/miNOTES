@@ -1,27 +1,20 @@
-import React, {useState} from "react"
-import { Link} from "react-router-dom"
+import React from "react"
+import { Link } from "react-router-dom"
 import '../styles/notes_grid.css'
-import { getFirestore, doc, deleteDoc} from "firebase/firestore";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import '../styles/swal.css'
-import '../styles/spinner.css'
-import '../styles/swal.css'
-
 
 function MinNote(props){
 
     const MySwal = withReactContent(Swal)
 
-    const user = localStorage.getItem('user');
-    const currentUser = JSON.parse(user)
-
-
+    let notesArray = props.notes;
+    let noteIdx = props.notes.indexOf(props.note);
 
     let current = window.location.pathname;
     let heart
     let noteIsFav;
-    
     if(window.location.pathname !== '/fav'){
         noteIsFav = props.favs.some( oneNote =>oneNote.title === props.note.title)
         if(noteIsFav){
@@ -30,10 +23,6 @@ function MinNote(props){
             heart = <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6.28 3c3.236.001 4.973 3.491 5.72 5.031.75-1.547 2.469-5.021 5.726-5.021 2.058 0 4.274 1.309 4.274 4.182 0 3.442-4.744 7.851-10 13-5.258-5.151-10-9.559-10-13 0-2.676 1.965-4.193 4.28-4.192zm.001-2c-3.183 0-6.281 2.187-6.281 6.192 0 4.661 5.57 9.427 12 15.808 6.43-6.381 12-11.147 12-15.808 0-4.011-3.097-6.182-6.274-6.182-2.204 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248z"/></svg>;
         }
     }
-
-    let setErasedNotes = props.set;
-    let erasedNote = props.erasedNote;
-    const db = getFirestore();
 
 
     const dispose = (e) => {
@@ -45,28 +34,31 @@ function MinNote(props){
             customClass: {
                 confirmButton: "confirm-btn",
                 popup : "swal-cont",
+                
             },
             confirmButtonText : <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff" viewBox="0 0 24 24"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg> ,
-            cancelButtonText :<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff"viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg> ,
-
+                cancelButtonText :<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff"viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg> ,
             title : '¿🗑️?',
             showCancelButton: true })
             .then( (result) =>{
                 if(result.isConfirmed){
-                    let docRef =  doc(db, 'notes' + currentUser.uid, props.note.title);
-                    deleteDoc(docRef)    
+                    notesArray.splice(noteIdx, 1);
+                    localStorage.setItem('notes', JSON.stringify(notesArray));
                     setErasedNotes(true)
                 } 
             });
-        }else{
+
+               }else{
             props.addOrRemoveFav();
         }
     }
 
    
-        return(
-        <Link  to={`/notes?title=${props.note.title}&&from=${current}`}style={{textDecoration: "none"}} >
-                    <div className="note"  style={{backgroundColor:`${props.note.color}`}}>
+
+    return(
+      
+        <Link  to={`/notes?title=${props.note.title}&&from=${current}`} style={{textDecoration: "none"}} >
+                    <div className="note"  style={{backgroundColor:`${props.note.col}`}}>
                     <div className="note-actions">
                        { window.location.pathname !== '/fav' &&
                        <button onClick={dispose}>
@@ -85,7 +77,7 @@ function MinNote(props){
                         props.note.body:
                         props.note.body.substring(0, 100)+"... "} disabled form="usrform"  className="new-note-body" ></textarea>
                     </div>
-        </Link>
+                    </Link>
     )
 }
 
