@@ -1,9 +1,10 @@
 import React, {useRef} from "react";
-import '../styles/login.css'
 import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+
+import '../styles/login.css'
 
 function Register (props) {
 
@@ -105,17 +106,17 @@ function Register (props) {
          
 
 
-      }
+    }
 
     return(
-        <>
+    <>
         <div className="log-head">
             <div className="log-dot"> 
             <div className="log-title"><Link to="/login">miNOTE</Link></div>
             </div>
         </div>
     <form action="">
-     <div className="login-data">
+      <div className="login-data">
           <label htmlFor="email">Email:</label>
             <input  id="email" className="login-mail" type="text" ref={email}/> 
          <div className="password-column">
@@ -137,7 +138,6 @@ function Register (props) {
       </div>
       <a target='blank' href="https://www.linkedin.com/in/lautaro-rocha/">designed and developed by @lautaroRocha</a>
     </form>
-
     </>
     )
 }

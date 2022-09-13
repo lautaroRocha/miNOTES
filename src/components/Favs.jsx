@@ -7,8 +7,7 @@ import '../styles/notes_grid.css'
 import MinNote from "./MinNote";
 
 function Favs(props){
-
-  const loggedUser = localStorage.getItem('user')
+  
   const navigate = useNavigate();
 
   const handleKeyPress = useCallback((event) => {

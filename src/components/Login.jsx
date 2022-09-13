@@ -4,11 +4,9 @@ import {getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onA
 from 'firebase/auth'
 import { useNavigate, Link} from 'react-router-dom'
 import '../styles/swal.css'
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 
 
-function Icon() {
+function GoogleIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -57,29 +55,27 @@ function Icon() {
 
 function Login(props) {
 
-const MySwal = withReactContent(Swal)
+  const emailInput = useRef();
+  const passInput = useRef();
+  const eyeIcon = useRef();
 
-const emailInput = useRef();
-const passInput = useRef();
-const eyeIcon = useRef();
+  let path = eyeIcon.current;
 
 
-const provider = new GoogleAuthProvider();
+  const provider = new GoogleAuthProvider();
 
-const setFirstRend = props.setFirstRend;
-const setUser = props.setUser;
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const app = props.app;
-const auth = getAuth(app)
+  const app = props.app;
+  const auth = getAuth(app)
 
-const loginInWithMailAndPass = async (e) => {
+  const loginInWithMailAndPass = async (e) => {
     e.preventDefault();
     const loginEmail = document.querySelector('#email').value;
     const loginPass = document.querySelector('#pass').value;
     signInWithEmailAndPassword(auth, loginEmail, loginPass)
       .then(
-        setFirstRend(true)
+        props.setFirstRend(true)
       ).catch( (error) =>{
         const er = JSON.stringify(error)
         if(er.includes("user-not-found")||er.includes('invalid-email')){
@@ -90,99 +86,101 @@ const loginInWithMailAndPass = async (e) => {
     }
       )
 
-}
+  }
 
-const loginWithGoogle = () =>{
-signInWithPopup(auth, provider)
-  .then((result) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const googleUser = result.user;
-    // ...
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-  });
-}
+  const loginWithGoogle = () =>{
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const googleUser = result.user;
+      // ...
+    }).catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+  }
 
-
-
-const useMonitorAuthState = async () => {
-    useEffect(() =>{
-        onAuthStateChanged(auth, user =>{
-            if (user){
-                setUser(user)
+  const useMonitorAuthState = async () => {
+      useEffect(() =>{
+          onAuthStateChanged(auth, user =>{
+              if (user){
+                props.setUser(user);
                 localStorage.setItem('user', JSON.stringify(user));
                 navigate('/', {replace:true})
-            }
-        })
-    })
-    
-    
-}
-
-const showError = (input) =>{
-  if(input === 'email'){
-  emailInput.current.style.outline = "solid	#8B0000"
-  }else if(input === 'password'){
-    passInput.current.style.outline = "solid	#8B0000"
-  }else{
-    passInput.current.style.outline = "solid #8B0000"
-    emailInput.current.style.outline = "solid	#8B0000"
+              }
+          })
+      })
   }
-}
 
-const showOrHidePass = () =>{
-  let type = passInput.current.type;
-  let path = eyeIcon.current;
-  let dPath = path.getAttribute('d');
+  const showError = (input) =>{
+    if(input === 'email'){
+    emailInput.current.style.outline = "solid	#8B0000"
+    }else if(input === 'password'){
+      passInput.current.style.outline = "solid	#8B0000"
+    }else{
+      passInput.current.style.outline = "solid #8B0000"
+      emailInput.current.style.outline = "solid	#8B0000"
+    }
+  }
 
-  type === "password" ?
-    passInput.current.type = "text"
-    :
-    passInput.current.type = "password";
-    
-  dPath === 'M11.885 14.988l3.104-3.098.011.11c0 1.654-1.346 3-3 3l-.115-.012zm8.048-8.032l-3.274 3.268c.212.554.341 1.149.341 1.776 0 2.757-2.243 5-5 5-.631 0-1.229-.13-1.785-.344l-2.377 2.372c1.276.588 2.671.972 4.177.972 7.733 0 11.985-8.449 11.985-8.449s-1.415-2.478-4.067-4.595zm1.431-3.536l-18.619 18.58-1.382-1.422 3.455-3.447c-3.022-2.45-4.818-5.58-4.818-5.58s4.446-7.551 12.015-7.551c1.825 0 3.456.426 4.886 1.075l3.081-3.075 1.382 1.42zm-13.751 10.922l1.519-1.515c-.077-.264-.132-.538-.132-.827 0-1.654 1.346-3 3-3 .291 0 .567.055.833.134l1.518-1.515c-.704-.382-1.496-.619-2.351-.619-2.757 0-5 2.243-5 5 0 .852.235 1.641.613 2.342z' ?
+  const showOrHidePass = () =>{
+    changePasswordInputType();
+    changeEyeIcon();
+  }
+
+  const changePasswordInputType = () => {
+    let type = passInput.current.type;
+
+    type === "password" ?
+      passInput.current.type = "text"
+      :
+      passInput.current.type = "password";
+  }
+
+  const changeEyeIcon = () => {
+    let dPath = path.getAttribute('d');
+
+    dPath === 'M11.885 14.988l3.104-3.098.011.11c0 1.654-1.346 3-3 3l-.115-.012zm8.048-8.032l-3.274 3.268c.212.554.341 1.149.341 1.776 0 2.757-2.243 5-5 5-.631 0-1.229-.13-1.785-.344l-2.377 2.372c1.276.588 2.671.972 4.177.972 7.733 0 11.985-8.449 11.985-8.449s-1.415-2.478-4.067-4.595zm1.431-3.536l-18.619 18.58-1.382-1.422 3.455-3.447c-3.022-2.45-4.818-5.58-4.818-5.58s4.446-7.551 12.015-7.551c1.825 0 3.456.426 4.886 1.075l3.081-3.075 1.382 1.42zm-13.751 10.922l1.519-1.515c-.077-.264-.132-.538-.132-.827 0-1.654 1.346-3 3-3 .291 0 .567.055.833.134l1.518-1.515c-.704-.382-1.496-.619-2.351-.619-2.757 0-5 2.243-5 5 0 .852.235 1.641.613 2.342z' ?
     path.setAttribute('d', "M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z")
     :
     path.setAttribute('d', 'M11.885 14.988l3.104-3.098.011.11c0 1.654-1.346 3-3 3l-.115-.012zm8.048-8.032l-3.274 3.268c.212.554.341 1.149.341 1.776 0 2.757-2.243 5-5 5-.631 0-1.229-.13-1.785-.344l-2.377 2.372c1.276.588 2.671.972 4.177.972 7.733 0 11.985-8.449 11.985-8.449s-1.415-2.478-4.067-4.595zm1.431-3.536l-18.619 18.58-1.382-1.422 3.455-3.447c-3.022-2.45-4.818-5.58-4.818-5.58s4.446-7.551 12.015-7.551c1.825 0 3.456.426 4.886 1.075l3.081-3.075 1.382 1.42zm-13.751 10.922l1.519-1.515c-.077-.264-.132-.538-.132-.827 0-1.654 1.346-3 3-3 .291 0 .567.055.833.134l1.518-1.515c-.704-.382-1.496-.619-2.351-.619-2.757 0-5 2.243-5 5 0 .852.235 1.641.613 2.342z')
-   
-}
+  
+  }
 
-useMonitorAuthState()
 
+  useMonitorAuthState()
 
     return(
         <>
-            <div className="log-head">
+          <div className="log-head">
                 <div className="log-dot"> 
                 <div className="log-title">miNOTE</div>
                 </div>
+          </div>
+          <form action="">
+            <div className="login-data">
+                <label htmlFor="email">Email:</label>
+                <input  id="email" className="login-mail" type="text" ref={emailInput} /> 
+                <label htmlFor="pass">Password:</label>
+                <input id="pass" className="login-pass" type="password" ref={passInput}></input> 
+                <svg onClick={showOrHidePass} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path ref={eyeIcon} d='M11.885 14.988l3.104-3.098.011.11c0 1.654-1.346 3-3 3l-.115-.012zm8.048-8.032l-3.274 3.268c.212.554.341 1.149.341 1.776 0 2.757-2.243 5-5 5-.631 0-1.229-.13-1.785-.344l-2.377 2.372c1.276.588 2.671.972 4.177.972 7.733 0 11.985-8.449 11.985-8.449s-1.415-2.478-4.067-4.595zm1.431-3.536l-18.619 18.58-1.382-1.422 3.455-3.447c-3.022-2.45-4.818-5.58-4.818-5.58s4.446-7.551 12.015-7.551c1.825 0 3.456.426 4.886 1.075l3.081-3.075 1.382 1.42zm-13.751 10.922l1.519-1.515c-.077-.264-.132-.538-.132-.827 0-1.654 1.346-3 3-3 .291 0 .567.055.833.134l1.518-1.515c-.704-.382-1.496-.619-2.351-.619-2.757 0-5 2.243-5 5 0 .852.235 1.641.613 2.342z'/></svg>
             </div>
-
-        <form action="">
-         <div className="login-data">
-               <label htmlFor="email">Email:</label>
-               <input  id="email" className="login-mail" type="text" ref={emailInput} /> 
-               <label htmlFor="pass">Password:</label>
-               <input id="pass" className="login-pass" type="password" ref={passInput}></input> <svg onClick={showOrHidePass} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path ref={eyeIcon} d='M11.885 14.988l3.104-3.098.011.11c0 1.654-1.346 3-3 3l-.115-.012zm8.048-8.032l-3.274 3.268c.212.554.341 1.149.341 1.776 0 2.757-2.243 5-5 5-.631 0-1.229-.13-1.785-.344l-2.377 2.372c1.276.588 2.671.972 4.177.972 7.733 0 11.985-8.449 11.985-8.449s-1.415-2.478-4.067-4.595zm1.431-3.536l-18.619 18.58-1.382-1.422 3.455-3.447c-3.022-2.45-4.818-5.58-4.818-5.58s4.446-7.551 12.015-7.551c1.825 0 3.456.426 4.886 1.075l3.081-3.075 1.382 1.42zm-13.751 10.922l1.519-1.515c-.077-.264-.132-.538-.132-.827 0-1.654 1.346-3 3-3 .291 0 .567.055.833.134l1.518-1.515c-.704-.382-1.496-.619-2.351-.619-2.757 0-5 2.243-5 5 0 .852.235 1.641.613 2.342z'
-             /></svg>
-         </div>
             <div className="login-btns">
                 <button type='submit' onClick={loginInWithMailAndPass}>login</button>
                 <Link to='/register' className="log-reg">register</Link>
             </div>
             <div className="login-go">
-                    {<Icon />} <span onClick={loginWithGoogle}>Access with Google</span>
+              {<GoogleIcon/>}<span onClick={loginWithGoogle}>Access with Google</span>
             </div>
             <a target='blank' href="https://www.linkedin.com/in/lautaro-rocha/">designed and developed by @lautaroRocha</a>
-        </form>
+            <a href="https://minote-offline.web.app/">OFFLINE VERSION</a>
+          </form>
 
         </>
     )

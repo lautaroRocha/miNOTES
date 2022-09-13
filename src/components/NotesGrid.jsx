@@ -1,9 +1,8 @@
 import React from "react";
-import MinNote from "./MinNote";
-import Footer from './Footer'
-import { useState, useEffect, useCallback, useRef } from "react";
-
+import { useState, useEffect, useCallback} from "react";
 import { useNavigate } from "react-router-dom";
+import MinNote from "./MinNote";
+
 import '../styles/notes_grid.css'
 import '../styles/spinner.css'
 import '../styles/swal.css'
@@ -19,14 +18,11 @@ function LoadingSpinner(){
   )
 }
 
-
 function NotesGrid(props) {
-  const firstRend = props.firstRend;
-  const setFirstRend = props.setFirstRend;
+
   const [load, setLoad] = useState(false)
   const navigate = useNavigate();
-  const setErasedNote = props.setErasedNote
-  const erasedNote = props.erasedNote;
+
 
   const handleKeyPress = useCallback((event) => {
       if (event.shiftKey === true) {
@@ -45,12 +41,12 @@ function NotesGrid(props) {
   useEffect( () => {
     setTimeout(function(){
         setLoad(true)
-        setFirstRend(false);
+        props.setFirstRend(false);
     }, 2500)
   })
     
   function display(){
-    if(firstRend){
+    if(props.firstRend){
       if(!load){
         return(
           <LoadingSpinner />
@@ -60,7 +56,7 @@ function NotesGrid(props) {
           <div className="notes-grid">   
             {props.notes.map((note, idx) =>{ 
             return( 
-              <MinNote note={note} key={idx} set={setErasedNote} erasedNote={erasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
+              <MinNote note={note} key={idx} setErasedNote={props.setErasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
             )})}
           </div> 
       )
@@ -70,18 +66,19 @@ function NotesGrid(props) {
         <div className="notes-grid">   
             {props.notes.map((note, idx) =>{ 
             return( 
-              <MinNote note={note} key={idx} set={setErasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
+              <MinNote note={note} key={idx} setErasedNote={props.setErasedNote} addOrRemoveFav={props.addOrRemoveFav} favs={props.favs}/>
             )})}
           </div>
       )
     }
   }
-    return(
+
+  return(
       <>
      { display()}
       </>
     )
-    }
+}
   
 
 export default NotesGrid;

@@ -13,34 +13,20 @@ function Note(props){
     const currentUser = JSON.parse(user);
     const setNewNote = props.setNewNote;
     
-    
     const MySwal = withReactContent(Swal)
-
 
     const navigate = useNavigate();
-    const MySwal = withReactContent(Swal)
-    const [savedNotes, setSavedNotes] = useState(props.notes);
-
-    useEffect(() => {
-        let savedArr = props.notes;
-        setSavedNotes(savedArr);
-    }, [savedNotes])
-
-
+    const db = getFirestore();
+    
     let params = new URLSearchParams(document.location.search)
     let title = params.get('title')
     let origin = params.get('from')
-   
     let note = props.notes.find(note => note.title === title);
-    let noteIdx = props.notes.indexOf(note);
-
-
-    const db = getFirestore();
-
+    
     if(origin === "/fav"){
         note = props.favs.find(note => note.title === title)
-        noteIdx = props.favs.indexOf(note);
     }  
+
     const edit = () =>{
         const titleToEdit = document.querySelector('.new-note-title')
         const editableTitle = document.createElement("textarea");
@@ -56,6 +42,7 @@ function Note(props){
         titleToEdit.replaceWith(editableTitle)
         bodyToEdit.replaceWith(editableBody)        
     }
+
     const save = () => {
         let title = document.querySelector('.new-note-title').value;
         let body = document.querySelector('.new-note-body').value;
@@ -106,9 +93,8 @@ function Note(props){
                     deleteDoc(docRef);
                     navigate('/', {replace:true})
                 }
-            }
-    })}
-
+            }})
+    }
 
     const handleKeyPress = useCallback((event) => {
         if (event.shiftKey === true) {

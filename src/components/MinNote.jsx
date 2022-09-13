@@ -1,12 +1,12 @@
-import React, {useState} from "react"
+import React from "react"
 import { Link} from "react-router-dom"
-import '../styles/notes_grid.css'
 import { getFirestore, doc, deleteDoc} from "firebase/firestore";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+
+import '../styles/notes_grid.css'
 import '../styles/swal.css'
 import '../styles/spinner.css'
-import '../styles/swal.css'
 
 
 function MinNote(props){
@@ -15,8 +15,7 @@ function MinNote(props){
 
     const user = localStorage.getItem('user');
     const currentUser = JSON.parse(user)
-
-
+    const db = getFirestore();
 
     let current = window.location.pathname;
     let heart
@@ -31,14 +30,7 @@ function MinNote(props){
         }
     }
 
-    let setErasedNotes = props.set;
-    let erasedNote = props.erasedNote;
-    const db = getFirestore();
-
-
     const dispose = (e) => {
-        let setErasedNotes = props.set;
-
         if(current !== "/fav"){
         e.preventDefault();
         MySwal.fire({
@@ -48,14 +40,13 @@ function MinNote(props){
             },
             confirmButtonText : <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff" viewBox="0 0 24 24"><path d="M9 22l-10-10.598 2.798-2.859 7.149 7.473 13.144-14.016 2.909 2.806z"/></svg> ,
             cancelButtonText :<svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="#fff"viewBox="0 0 24 24"><path d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z"/></svg> ,
-
             title : '¿🗑️?',
             showCancelButton: true })
             .then( (result) =>{
                 if(result.isConfirmed){
                     let docRef =  doc(db, 'notes' + currentUser.uid, props.note.title);
                     deleteDoc(docRef)    
-                    setErasedNotes(true)
+                    props.setErasedNote(true)
                 } 
             });
         }else{
@@ -63,8 +54,7 @@ function MinNote(props){
         }
     }
 
-   
-        return(
+    return(
         <Link  to={`/notes?title=${props.note.title}&&from=${current}`}style={{textDecoration: "none"}} >
                     <div className="note"  style={{backgroundColor:`${props.note.color}`}}>
                     <div className="note-actions">
