@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 import '../styles/login.css'
+import '../styles/swal.css'
 
 function Register (props) {
 
@@ -40,13 +41,12 @@ function Register (props) {
 
     const createAccount = async (e) => {
         e.preventDefault();
-
-        if(pass.current.value === passConfirm.current.value){
         createUserWithEmailAndPassword(auth, email.current.value, pass.current.value)
           .then(
             setFirstRend(true)
           ).catch( (error) =>{
             const er = JSON.stringify(error)
+            console.log(er)
             if(er.includes('email-already-in-use')){
               MySwal.fire({
                 title:'The email is already in use',
@@ -56,18 +56,30 @@ function Register (props) {
                 }})
             showError('email')
             }
-          })
-        
-    
-        }else{
-          MySwal.fire({
-            title:"The passwords don't match",
-          customClass: {
-            confirmButton: "confirm-btn",
-            popup : "swal-cont",
+            else if(er.includes('invalid-email')){
+              MySwal.fire({
+                title:'The email is not valid',
+                customClass: {
+                  confirmButton: "confirm-btn",
+                  popup : "swal-cont",
+                }})
+            showError('email')
+            }else if(er.includes('weak-password')){
+              MySwal.fire({
+                title:'The password is too weak',
+                customClass: {
+                  confirmButton: "confirm-btn",
+                  popup : "swal-cont",
+                }})
+            }else{
+              MySwal.fire({
+                title:"The passwords don't match",
+                customClass: {
+                confirmButton: "confirm-btn",
+                popup : "swal-cont",
+              }})
+              showError('password')
             }})
-            showError('password')
-        }
     }
 
     const showOrHidePass = (e) =>{

@@ -1,16 +1,16 @@
-.swal-cont{
-    background-color:#cfd8dc;
-    color: #455a64;
-    fill: #455a64;
-    width: 40%;
+.swal2-container .swal-cont{
+    background-color:#cfd8dc !important;
+    color: #455a64 !important;
+    fill: #455a64 !important;
+    width: 40% !important;
 }
 @media(max-width:600px){
     .swal-cont{
-        max-width: 250px;
+        max-width: 250px !important;
     }
 
 }
 
 .swal2-actions .confirm-btn{
-    background-color: #455a64;
+    background-color: #455a64 !important;
 }
