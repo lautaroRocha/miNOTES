@@ -38,5 +38,10 @@ I used plain CSS and kept a minimalistic approach in the design of the app. The 
 If the Firebase daily quota is excedeed, the app counts with an offline version that runs on localStorage. It's linked at the bottom of the login components, wich is accesible to unathourized users.
 
 
+### Reach me 
+
+📧 lautarovrocha@gmail.com
+👤 https://www.linkedin.com/in/lautaro-rocha/
+
 
 
