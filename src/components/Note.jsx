@@ -28,28 +28,20 @@ function Note(props){
     }  
 
     const edit = () =>{
-        const titleToEdit = document.querySelector('.new-note-title')
-        const editableTitle = document.createElement("textarea");
-        editableTitle.className = "new-note-title"
-        editableTitle.textContent= note.title;
-
         const bodyToEdit = document.querySelector('.new-note-body')
         const editableBody = document.createElement("textarea");
         editableBody.setAttribute('form', "usrform")
         editableBody.className = "new-note-body"
         editableBody.textContent= note.body;
 
-        titleToEdit.replaceWith(editableTitle)
         bodyToEdit.replaceWith(editableBody)        
     }
 
     const save = () => {
-        let title = document.querySelector('.new-note-title').value;
         let body = document.querySelector('.new-note-body').value;
-        let col = note.col;
-        const noteRef = doc(db, "notes" + currentUser.uid, note.title)
+        const noteRef = doc(db, "notes" + currentUser.uid, note.title);
         let editedNote = {
-            title, body,col
+            body
         };
         if(title === note.title && body === note.body){
             origin !== '/fav' && navigate('/', {replace:true});
@@ -57,7 +49,6 @@ function Note(props){
         }else{
             if(origin !== '/fav'){
                 updateDoc(noteRef, {
-                    title : editedNote.title,
                     body : editedNote.body
                 }
                 ).then(
