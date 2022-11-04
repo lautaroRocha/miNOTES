@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getFirestore, setDoc, doc} from 'firebase/firestore'
 
@@ -11,6 +11,8 @@ function NewNote(props){
 
     const user = localStorage.getItem('user');
     const currentUser = JSON.parse(user)
+    
+    const card = useRef();
 
     const navigate = useNavigate();
 
@@ -42,8 +44,8 @@ function NewNote(props){
     }
 
     const colourCard = (e) => {
-        let card = document.querySelector(".new-note")
-        card.style.backgroundColor = e.target.value;
+        card.current.style.backgroundColor = e.target.value;
+        console.log(e.target.value)
     }
 
     const handleKeyPress = useCallback((event) => {
@@ -64,7 +66,7 @@ function NewNote(props){
 
     return(
         <>
-        <div className="new-note">
+        <div className="new-note" ref={card}>
             <textarea form="usrform" className="new-note-title">
             </textarea>
             <textarea  form="usrform" className="new-note-body">
@@ -73,7 +75,7 @@ function NewNote(props){
                 <button className="cancel" onClick={cancel}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/></svg>
                 </button>
-                <input type="color" id="colorPicker" onChange={colourCard} list="presetColors" defaultValue='#455a64'/>
+                <input type="color" id="colorPicker" onChange={colourCard} defaultValue="#455a64"/>
                     <datalist id="presetColors">
                         <option>#455a64</option>
                         <option>#C8566B</option>
